@@ -1,0 +1,24 @@
+{
+  "name": "js-closures-workshop",
+  "version": "0.1.0",
+  "description": "Presentation for the \"JavaScript Scope and Closures\" Thinkful workshop",
+  "main": "index.html",
+  "scripts": {
+    "build": "cleaver index.md",
+    "start": "cleaver watch index.md --style style.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firstdoit/js-closures-workshop.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/firstdoit/js-closures-workshop/issues"
+  },
+  "homepage": "https://github.com/firstdoit/js-closures-workshop#readme",
+  "dependencies": {
+    "cleaver": "^0.7.7"
+  }
+}
