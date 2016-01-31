@@ -151,7 +151,7 @@ img.badge {
 
 .slide-content {
   height: inherit;
-  width: 100%;
+  width: inherit;
   padding: 0;
   margin: 0;
   font-size: 200%;
@@ -234,7 +234,7 @@ h2 {
 
 h3 {
   margin: 0;
-  padding-bottom: 15px;
+  padding: 0 25px 25px 15px;
   font-size: 140%;
   line-height: 1.2;
   border-bottom: 2px ridge #fafafa;
@@ -479,7 +479,7 @@ pre .hljs-xml .hljs-cdata {
   }
 
   .slide-content {
-    width: 100%;
+    width: inherit;
   }
 
   img {
