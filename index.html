@@ -933,7 +933,6 @@ pre .hljs-xml .hljs-cdata {
 }
 
   </style>
-    <script async src="http://localhost:35729/livereload.js"></script>
 </head>
 <body>
     <div class="progress">
@@ -1071,7 +1070,8 @@ pre .hljs-xml .hljs-cdata {
   </div>
   <div class="slide hidden" id="slide-20">
     <section class="slide-content"><p>What&#39;s happening?</p>
-<pre><code class="lang-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> i;
+<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
     setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
       <span class="hljs-built_in">console</span>.log(i);
     }, <span class="hljs-number">100</span>);
@@ -1085,9 +1085,10 @@ pre .hljs-xml .hljs-cdata {
 </section>
   </div>
   <div class="slide hidden" id="slide-22">
-    <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+    <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">var</span> i;
+<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
     something = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-      <span class="hljs-comment">// Scope created!</span>
+      <span class="hljs-comment">// Closure created!</span>
       <span class="hljs-built_in">console</span>.log(i);
     };
     setTimeout(something, <span class="hljs-number">100</span>);
@@ -1095,7 +1096,8 @@ pre .hljs-xml .hljs-cdata {
 </section>
   </div>
   <div class="slide hidden" id="slide-23">
-    <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+    <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">var</span> i;
+<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
     something = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
       <span class="hljs-comment">// Reference for i saved</span>
       <span class="hljs-built_in">console</span>.log(i);
@@ -1226,6 +1228,16 @@ myArray.forEach(<span class="hljs-function"><span class="hljs-keyword">function<
   <div class="slide hidden" id="slide-37">
     <section class="slide-content"><h3 id="the-private-data">The private data</h3>
 <p>Closures are also useful to hide data from the outside world.</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createPerson</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">var</span> age = <span class="hljs-number">25</span>;
+  <span class="hljs-keyword">var</span> looksLike = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> age - <span class="hljs-number">5</span>;
+  };
+  <span class="hljs-keyword">return</span> { looksLike: looksLike };
+}
+<span class="hljs-keyword">var</span> dude = createPerson();
+dude.looksLike() <span class="hljs-comment">// 20</span>
+dude.age <span class="hljs-comment">// undefined</span></code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-38">

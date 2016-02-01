@@ -141,7 +141,8 @@ I'm sorry to disappoint you:
 What's happening?
 
 ```js
-for (var i = 0; i < 10; i++) {
+var i;
+for (i = 0; i < 10; i++) {
     setTimeout(function () {
       console.log(i);
     }, 100);
@@ -154,9 +155,10 @@ for (var i = 0; i < 10; i++) {
 --
 
 ```js
-for (var i = 0; i < 10; i++) {
+var i;
+for (i = 0; i < 10; i++) {
     something = function () {
-      // Scope created!
+      // Closure created!
       console.log(i);
     };
     setTimeout(something, 100);
@@ -165,7 +167,8 @@ for (var i = 0; i < 10; i++) {
 --
 
 ```js
-for (var i = 0; i < 10; i++) {
+var i;
+for (i = 0; i < 10; i++) {
     something = function () {
       // Reference for i saved
       console.log(i);
@@ -327,6 +330,19 @@ for (let i = 0; i < 10; i++) {
 ### The private data
 
 Closures are also useful to hide data from the outside world.
+
+```js
+function createPerson () {
+  var age = 25;
+  var looksLike = function () {
+    return age - 5;
+  };
+  return { looksLike: looksLike };
+}
+var dude = createPerson();
+dude.looksLike() // 20
+dude.age // undefined
+```
 
 --
 
