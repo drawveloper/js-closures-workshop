@@ -134,13 +134,13 @@ If you guessed:
 
 --
 
-I'm sorry to disappoint you:
+I'm sorry to disappoint you: 😭
 
 `10, 10, 10, 10, 10, ...`
 
 --
 
-What's happening?
+What's happening? 🤔
 
 ```js
 var i;
@@ -211,7 +211,7 @@ createMyFunction = function (myArgument) {
 
 --
 
-Ma, look at my scopes!
+Ma, look at my scopes! 😎
 
 ```js
 createMyFunction = function (myArgument) {
@@ -270,7 +270,7 @@ for (var i = 0; i < 10; i++) {
 
 --
 
-Et voilà:
+Et voilà: 😁
 
 `1, 2, 3, 4, 5, ...`
 
@@ -364,6 +364,40 @@ dude.age // undefined
 
 --
 
+### Functional Programming
+
+Closures are also used in functional programming in JS.  
+In this example, we use something similar to *partial application*.
+
+```js
+function makeAdder(x) {
+  return function(y) {
+    return x + y;
+  };
+}
+var add5 = makeAdder(5);
+var add10 = makeAdder(10);
+add5(2);  // 7
+add10(2); // 12
+```
+
+--
+
+Similar, because *actual* partial application would let you do this:
+
+```js
+function add(x, y) {
+  return x + y;
+}
+// NOT JAVASCRIPT!
+var add5 = add(5); // only applied first arg
+add5(2); // 7
+```
+
+(We can do this with `bind`. Can you find out how? Homework 😜)
+
+--
+
 # Context isnt Scope
 
 --
@@ -426,6 +460,8 @@ b.sayAge(); // 2
 
 # Thanks!
 
+## 💥💥💥
+
 --
 
 ## Resources
@@ -433,6 +469,7 @@ b.sayAge(); // 2
 - http://firstdoit.com/closures/
 - https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-closure-b2f0d2152b36
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
 - https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/let
 - https://toddmotto.com/everything-you-wanted-to-know-about-javascript-scope/
 - https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind
