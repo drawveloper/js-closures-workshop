@@ -58,7 +58,9 @@ console.log(bar) // ReferenceError!
 
 --
 
-## New function = new scope.
+### New function = new scope.
+
+This creates the **scope chain**.
 
 ```js
 // Scope A
@@ -118,9 +120,9 @@ What should happen here?
 
 ```js
 for (var i = 0; i < 10; i++) {
-    setTimeout(function () {
-      console.log(i);
-    }, 100);
+  setTimeout(function () {
+    console.log(i);
+  }, 100);
 }
 ```
 
@@ -143,9 +145,9 @@ What's happening?
 ```js
 var i;
 for (i = 0; i < 10; i++) {
-    setTimeout(function () {
-      console.log(i);
-    }, 100);
+  setTimeout(function () {
+    console.log(i);
+  }, 100);
 }
 ```
 --
@@ -157,11 +159,11 @@ for (i = 0; i < 10; i++) {
 ```js
 var i;
 for (i = 0; i < 10; i++) {
-    myFunction = function () {
-      // Closure created!
-      console.log(i);
-    };
-    setTimeout(myFunction, 100);
+  myFunction = function () {
+    // Closure created!
+    console.log(i);
+  };
+  setTimeout(myFunction, 100);
 }
 ```
 
@@ -170,11 +172,11 @@ for (i = 0; i < 10; i++) {
 ```js
 var i;
 for (i = 0; i < 10; i++) {
-    myFunction = function () {
-      // Reference for i saved
-      console.log(i);
-    };
-    setTimeout(myFunction, 100);
+  myFunction = function () {
+    // Reference for i saved
+    console.log(i);
+  };
+  setTimeout(myFunction, 100);
 }
 ```
 
@@ -242,10 +244,10 @@ So, what we had before:
 ```js
 var i;
 for (i = 0; i < 10; i++) {
-    myFunction = function () {
-      console.log(i);
-    };
-    setTimeout(myFunction, 100);
+  myFunction = function () {
+    console.log(i);
+  };
+  setTimeout(myFunction, 100);
 }
 ```
 
@@ -398,7 +400,9 @@ wat(); // Window
 ### `this` has no God.
 
 ```js
-var a = { age: 1, sayAge: function () {
+var a = {
+  age: 1,
+  sayAge: function () {
     console.log(this.age);
   }
 };
