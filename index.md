@@ -35,12 +35,7 @@ author:
 
 --
 
-> In JavaScript, scope refers to the current context of your code.
-
---
-
-> Scope is the set of variables, objects,   
-and functions you have access to.
+> In JavaScript, scope is the set of variables, objects, and functions you have access to.
 
 --
 
@@ -367,6 +362,64 @@ dude.age // undefined
 
 --
 
+# Context isnt Scope
+
+--
+
+### Context is the `this` keyword
+
+`this` is determined by *"where"* the function was called.
+
+```js
+var sayAge = function () {
+  console.log(this.age);
+};
+var a = { age: 1, sayAge: sayAge };
+var b = { age: 2, sayAge: sayAge };
+a.sayAge() // 1
+b.sayAge() // 2
+```
+
+--
+
+### `this` is a little complicated...
+
+`this` is `window` if executed on the global context.
+
+```js
+var wat = function () {
+  console.log(this);
+};
+wat(); // Window
+```
+
+--
+
+### `this` has no God.
+
+```js
+var a = { age: 1, sayAge: function () {
+    console.log(this.age);
+  }
+};
+var b = { age: 2 };
+a.sayAge(); // 1
+withoutContext = a.sayAge;
+withoutContext(); // undefined
+b.sayAge = a.sayAge;
+b.sayAge(); // 2
+```
+
+--
+
+### Advanced `this`
+
+`Function.apply()`  
+`Function.call()`  
+`Function.bind()`
+
+--
+
 # Thanks!
 
 --
@@ -378,3 +431,4 @@ dude.age // undefined
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions
 - https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/let
 - https://toddmotto.com/everything-you-wanted-to-know-about-javascript-scope/
+- https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind
