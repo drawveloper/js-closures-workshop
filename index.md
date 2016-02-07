@@ -39,6 +39,11 @@ author:
 
 --
 
+> Scope is the set of variables, objects,   
+and functions you have access to.
+
+--
+
 ## Scope is where state lives.
 
 ```js
@@ -157,23 +162,24 @@ for (i = 0; i < 10; i++) {
 ```js
 var i;
 for (i = 0; i < 10; i++) {
-    something = function () {
+    myFunction = function () {
       // Closure created!
       console.log(i);
     };
-    setTimeout(something, 100);
+    setTimeout(myFunction, 100);
 }
 ```
+
 --
 
 ```js
 var i;
 for (i = 0; i < 10; i++) {
-    something = function () {
+    myFunction = function () {
       // Reference for i saved
       console.log(i);
     };
-    setTimeout(something, 100);
+    setTimeout(myFunction, 100);
 }
 ```
 
@@ -199,7 +205,7 @@ Functions can return functions.
 Presenting: the **stateful function**.
 
 ```js
-gimmeSomething = function (myArgument) {
+createMyFunction = function (myArgument) {
   return function () {
     console.log(myArgument);
   }
@@ -211,7 +217,7 @@ gimmeSomething = function (myArgument) {
 Ma, look at my scopes!
 
 ```js
-gimmeSomething = function (myArgument) {
+createMyFunction = function (myArgument) {
   // Scope A - myArgument is a local var
   return function () {
     // Scope B - can access A
@@ -222,32 +228,46 @@ gimmeSomething = function (myArgument) {
 
 --
 
-When `gimmeSomething` is **executed**...
+When `createMyFunction` is **executed**...  
 The *inner function* is created.
 
 ```js
-gimmeSomething = function (myArgument) {
+createMyFunction = function (myArgument) {
   return function () {
     // Closure created! myArgument == 1
     console.log(myArgument);
   }
 };
-gimmeSomething(1);
+myFunction = createMyFunction(1);
+```
+--
+
+So, what we had before:
+
+```js
+var i;
+for (i = 0; i < 10; i++) {
+    myFunction = function () {
+      console.log(i);
+    };
+    setTimeout(myFunction, 100);
+}
 ```
 
 --
 
-It's a trap!
+What we have now:
 
 ```js
-gimmeSomething = function (myArgument) {
+createMyFunction = function (myArgument) {
   return function () {
     console.log(myArgument);
   }
 };
 for (var i = 0; i < 10; i++) {
   // Aha! i is trapped!
-  setTimeout(gimmeSomething(i), 100);
+  myFunction = createMyFunction(i);
+  setTimeout(myFunction, 100);
 }
 ```
 
@@ -261,7 +281,8 @@ Et voilà:
 
 ### Bonus points: using forEach
 
-When dealing with arrays, you can avoid `for` by using `Array.forEach`.
+When dealing with arrays, you can  
+avoid `for` by using `Array.forEach`.
 
 ```js
 var myArray = [1, 2, 3];
