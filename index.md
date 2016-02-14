@@ -152,10 +152,11 @@ from the outside world.
 ```js
 function createPerson () {
   var age = 25;
-  var looksLike = function () {
-    return age - 5;
+  return {
+    looksLike: function () {
+      return age - 5;
+    }
   };
-  return { looksLike: looksLike };
 }
 var dude = createPerson();
 dude.looksLike() // 20
@@ -389,6 +390,21 @@ for (var i = 0; i < 10; i++) {
 
 --
 
+What we have now (IIFE version):
+
+```js
+for (var i = 0; i < 10; i++) {
+  // Aha! i is trapped!
+  setTimeout((function (myArgument) {
+    return function () {
+      console.log(myArgument);
+    }
+  })(i), 100);
+}
+```
+
+--
+
 Et voilà: 😁
 
 `0, 1, 2, 3, 4, ...`
@@ -512,9 +528,10 @@ var a = {
 };
 var b = { age: 2 };
 a.sayAge(); // 1
-withoutContext = a.sayAge;
+var withoutContext = a.sayAge;
 withoutContext(); // undefined
 b.sayAge = a.sayAge;
+// b.sayAge = withoutContext;
 b.sayAge(); // 2
 ```
 
