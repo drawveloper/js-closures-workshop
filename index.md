@@ -16,10 +16,14 @@ author:
 ### Contents
 
 - Functions
-- Scope
-- Closure
-- Examples
-- ES2015
+- Scopes
+- Closures
+- ES2015 `let`
+- `this` keyword
+
+--
+
+# First things first!
 
 --
 
@@ -110,7 +114,162 @@ Yeah... so?
 
 --
 
-Time for **examples**!
+### Closure applications
+
+- Data privacy
+- Functional programming (sort of)
+- Stateful functions
+
+--
+
+# Data privacy
+
+--
+
+Imagine you want to create a person  
+object with a `looksLike` function,  
+but hide their age:
+
+```js
+function createPerson () {
+  return {
+    age: 25,
+    looksLike: function () {
+      return this.age - 5;
+    }
+  };
+}
+var dude = createPerson();
+dude.looksLike() // 20
+dude.age // 25 - oops!
+```
+
+--
+
+Closures are useful to hide data  
+from the outside world.
+
+```js
+function createPerson () {
+  var age = 25;
+  var looksLike = function () {
+    return age - 5;
+  };
+  return { looksLike: looksLike };
+}
+var dude = createPerson();
+dude.looksLike() // 20
+dude.age // undefined
+```
+
+--
+
+Questions?
+
+--
+
+# Functional Programming
+# (sort of)
+
+--
+
+Closures are also used in functional programming in JS.  
+In this example, we use something similar to *partial application*.
+
+```js
+function makeAdder(x) {
+  return function(y) {
+    return x + y;
+  };
+}
+var add5 = makeAdder(5);
+var add10 = makeAdder(10);
+add5(2);  // 7
+add10(2); // 12
+```
+
+--
+
+Similar, because *actual* partial application would let you do this:
+
+```js
+function add(x, y) {
+  return x + y;
+}
+// NOT JAVASCRIPT!
+var add5 = add(5); // only applied first arg
+add5(2); // 7
+```
+
+(We can do this with `bind`. Can you find out how? Homework 😜)
+
+--
+
+Questions?
+
+--
+
+# Stateful functions
+
+--
+
+Functions can return functions.  
+That `makeAdder` thing has a name.  
+Presenting: the **stateful function**.
+
+```js
+createMyFunction = function (myArgument) {
+  return function () {
+    console.log(myArgument);
+  }
+};
+```
+
+--
+
+Ma, look at my scopes! 😎
+
+```js
+createMyFunction = function (myArgument) {
+  // Scope A - myArgument is a local var
+  return function () {
+    // Scope B - can access A
+    console.log(myArgument);
+  }
+};
+```
+
+--
+
+When `createMyFunction` is **executed**...  
+The *inner function* is created.
+
+```js
+createMyFunction = function (myArgument) {
+  return function () {
+    // Closure created! myArgument == 1
+    console.log(myArgument);
+  }
+};
+myFunction = createMyFunction(1);
+```
+
+--
+
+Questions?
+
+--
+
+## Quick aside: `setTimeout`
+
+```js
+var logBanana = function() {
+  console.log('banana');
+}
+setTimeout(logBanana, 100);
+// After 100ms...
+// 'banana'
+```
 
 --
 
@@ -130,7 +289,7 @@ for (var i = 0; i < 10; i++) {
 
 If you guessed:
 
-`1, 2, 3, ...`
+`0, 1, 2, 3, ...`
 
 --
 
@@ -194,49 +353,9 @@ var i;
 
 --
 
-# Solution: Closure!
+# Solution:
+# Stateful function!
 
---
-
-Functions can return functions.  
-Presenting: the **stateful function**.
-
-```js
-createMyFunction = function (myArgument) {
-  return function () {
-    console.log(myArgument);
-  }
-};
-```
-
---
-
-Ma, look at my scopes! 😎
-
-```js
-createMyFunction = function (myArgument) {
-  // Scope A - myArgument is a local var
-  return function () {
-    // Scope B - can access A
-    console.log(myArgument);
-  }
-};
-```
-
---
-
-When `createMyFunction` is **executed**...  
-The *inner function* is created.
-
-```js
-createMyFunction = function (myArgument) {
-  return function () {
-    // Closure created! myArgument == 1
-    console.log(myArgument);
-  }
-};
-myFunction = createMyFunction(1);
-```
 --
 
 So, what we had before:
@@ -273,6 +392,10 @@ for (var i = 0; i < 10; i++) {
 Et voilà: 😁
 
 `0, 1, 2, 3, 4, ...`
+
+--
+
+Questions?
 
 --
 
@@ -345,59 +468,6 @@ for (let i = 0; i < 10; i++) {
 
 --
 
-### The private data
-
-Closures are also useful to hide data from the outside world.
-
-```js
-function createPerson () {
-  var age = 25;
-  var looksLike = function () {
-    return age - 5;
-  };
-  return { looksLike: looksLike };
-}
-var dude = createPerson();
-dude.looksLike() // 20
-dude.age // undefined
-```
-
---
-
-### Functional Programming
-
-Closures are also used in functional programming in JS.  
-In this example, we use something similar to *partial application*.
-
-```js
-function makeAdder(x) {
-  return function(y) {
-    return x + y;
-  };
-}
-var add5 = makeAdder(5);
-var add10 = makeAdder(10);
-add5(2);  // 7
-add10(2); // 12
-```
-
---
-
-Similar, because *actual* partial application would let you do this:
-
-```js
-function add(x, y) {
-  return x + y;
-}
-// NOT JAVASCRIPT!
-var add5 = add(5); // only applied first arg
-add5(2); // 7
-```
-
-(We can do this with `bind`. Can you find out how? Homework 😜)
-
---
-
 # Context isnt Scope
 
 --
@@ -455,6 +525,18 @@ b.sayAge(); // 2
 `Function.apply()`  
 `Function.call()`  
 `Function.bind()`
+
+--
+
+### Recap: closure applications
+
+- Data privacy
+- Functional programming (sort of)
+- Stateful functions
+
+--
+
+Questions?
 
 --
 
