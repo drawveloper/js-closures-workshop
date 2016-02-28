@@ -932,6 +932,20 @@ pre .hljs-xml .hljs-cdata {
   }
 }
 
+.buttons button {
+  margin: 10px;
+  padding: 10px 40px;
+  font-size: 0.5em;
+  font-family: 'Open Sans';
+  background-color: white;
+  border-radius: 5px;
+}
+
+.buttons {
+  margin-top: -20px;
+  margin-bottom: -20px;
+}
+
   </style>
 </head>
 <body>
@@ -1203,16 +1217,23 @@ add10(<span class="hljs-number">2</span>); <span class="hljs-comment">// 12</spa
   <div class="slide hidden" id="slide-30">
     <section class="slide-content"><h3 id="the-dreaded-async-for-bug">The dreaded <em>async for</em> bug</h3>
 <p>Let&#39;s say you have an array of buttons in the DOM.
-You want to create a click handler for each of them.</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = [...];
+You want to create a click handler for each of them. <div class='buttons ex1'><button>Foo</button><button>Bar</button><button>Qux</button></div></p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'button'</span>);
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; buttons.length; i++) {
   <span class="hljs-keyword">var</span> button = buttons[i];
   button.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     alert(button.innerText)
   })
 }</code></pre>
-<p>Where&#39;s the bug?!</p>
-</section>
+<script>
+var buttons = document.querySelectorAll('.ex1 button');
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  button.addEventListener('click', function() {
+    alert(button.innerText)
+  })
+}
+</script></section>
   </div>
   <div class="slide hidden" id="slide-31">
     <section class="slide-content"><p>All buttons alert <code>Qux</code>!</p>
@@ -1226,9 +1247,10 @@ You want to create a click handler for each of them.</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-33">
-    <section class="slide-content"><p>All functions share the reference for the same variable!</p>
+    <section class="slide-content"><p>All functions share the reference for the same variable!<br>Each loop, the variable is overwritten.<br>By the end, all point to the last button. 🐼</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = [...];
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; buttons.length; i++) {
+  <span class="hljs-comment">// Overwrites same reference!</span>
   <span class="hljs-keyword">var</span> button = buttons[i];
   button.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-comment">// Reference for button saved!</span>
@@ -1243,7 +1265,8 @@ You want to create a click handler for each of them.</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-35">
-    <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = [...];
+    <section class="slide-content"><p><div class='buttons ex2'><button>Foo</button><button>Bar</button><button>Qux</button></div></p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'button'</span>);
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; buttons.length; i++) {
   <span class="hljs-keyword">var</span> button = buttons[i];
   <span class="hljs-keyword">var</span> createClickHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el</span>) </span>{
@@ -1253,7 +1276,18 @@ You want to create a click handler for each of them.</p>
   }
   button.addEventListener(<span class="hljs-string">'click'</span>, createClickHandler(button))
 }</code></pre>
-</section>
+<script>
+var buttons = document.querySelectorAll('.ex2 button');
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  var createClickHandler = function (el) {
+    return function() {
+      alert(el.innerText)
+    }
+  }
+  button.addEventListener('click', createClickHandler(button))
+}
+</script></section>
   </div>
   <div class="slide hidden" id="slide-36">
     <section class="slide-content"><p>What we have now (IIFE version):</p>
@@ -1279,14 +1313,23 @@ Each button alerts its text.</p>
   </div>
   <div class="slide hidden" id="slide-39">
     <section class="slide-content"><h3 id="bonus-points-using-foreach">Bonus points: using forEach</h3>
-<p>When dealing with arrays, you can<br>avoid <code>for</code> by using <code>Array.forEach</code>.</p>
-<pre><code class="lang-js">buttons.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">button</span>) </span>{
+<p>When dealing with arrays, you can avoid <code>for</code> by using <code>Array.forEach</code>. <div class='buttons ex3'><button>Foo</button><button>Bar</button><button>Qux</button></div></p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = <span class="hljs-built_in">Array</span>.prototype.slice.call(
+  <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'button'</span>)
+);
+buttons.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">button</span>) </span>{
   button.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-comment">// Reference for button saved!</span>
     alert(button.innerText)
   })
 })</code></pre>
-</section>
+<script>
+var buttons = Array.prototype.slice.call(document.querySelectorAll('.ex3 button'));
+buttons.forEach(function(button) {
+  button.addEventListener('click', function() {
+    alert(button.innerText)
+  })
+})
+</script></section>
   </div>
   <div class="slide hidden" id="slide-40">
     <section class="slide-content"><h1 id="context-isnt-scope">Context isnt Scope</h1>
@@ -1314,7 +1357,7 @@ wat(); <span class="hljs-comment">// Window</span></code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-43">
-    <section class="slide-content"><h3 id="-this-has-no-god-"><code>this</code> has no God.</h3>
+    <section class="slide-content"><h3 id="-this-confusion-"><code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
   age: <span class="hljs-number">1</span>,
   sayAge: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{

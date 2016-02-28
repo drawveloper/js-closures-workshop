@@ -301,10 +301,9 @@ Questions?
 ### The dreaded *async for* bug
 
 Let's say you have an array of buttons in the DOM.
-You want to create a click handler for each of them.
-
+You want to create a click handler for each of them. <div class='buttons ex1'><button>Foo</button><button>Bar</button><button>Qux</button></div>
 ```js
-var buttons = [...];
+var buttons = document.querySelectorAll('button');
 for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
   button.addEventListener('click', function() {
@@ -312,8 +311,15 @@ for (var i = 0; i < buttons.length; i++) {
   })
 }
 ```
-
-Where's the bug?!
+<script>
+var buttons = document.querySelectorAll('.ex1 button');
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  button.addEventListener('click', function() {
+    alert(button.innerText)
+  })
+}
+</script>
 
 --
 
@@ -327,11 +333,14 @@ What's happening? 🤔
 
 --
 
-All functions share the reference for the same variable!
+All functions share the reference for the same variable!  
+Each loop, the variable is overwritten.  
+By the end, all point to the last button. 🐼
 
 ```js
 var buttons = [...];
 for (var i = 0; i < buttons.length; i++) {
+  // Overwrites same reference!
   var button = buttons[i];
   button.addEventListener('click', function() {
     // Reference for button saved!
@@ -346,9 +355,9 @@ for (var i = 0; i < buttons.length; i++) {
 # Stateful function!
 
 --
-
+<div class='buttons ex2'><button>Foo</button><button>Bar</button><button>Qux</button></div>
 ```js
-var buttons = [...];
+var buttons = document.querySelectorAll('button');
 for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
   var createClickHandler = function (el) {
@@ -359,6 +368,18 @@ for (var i = 0; i < buttons.length; i++) {
   button.addEventListener('click', createClickHandler(button))
 }
 ```
+<script>
+var buttons = document.querySelectorAll('.ex2 button');
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  var createClickHandler = function (el) {
+    return function() {
+      alert(el.innerText)
+    }
+  }
+  button.addEventListener('click', createClickHandler(button))
+}
+</script>
 
 --
 
@@ -389,17 +410,25 @@ Questions?
 
 ### Bonus points: using forEach
 
-When dealing with arrays, you can  
-avoid `for` by using `Array.forEach`.
-
+When dealing with arrays, you can avoid `for` by using `Array.forEach`. <div class='buttons ex3'><button>Foo</button><button>Bar</button><button>Qux</button></div>
 ```js
+var buttons = Array.prototype.slice.call(
+  document.querySelectorAll('button')
+);
 buttons.forEach(function(button) {
   button.addEventListener('click', function() {
-    // Reference for button saved!
     alert(button.innerText)
   })
 })
 ```
+<script>
+var buttons = Array.prototype.slice.call(document.querySelectorAll('.ex3 button'));
+buttons.forEach(function(button) {
+  button.addEventListener('click', function() {
+    alert(button.innerText)
+  })
+})
+</script>
 
 --
 
@@ -436,7 +465,7 @@ wat(); // Window
 
 --
 
-### `this` has no God.
+### `this` confusion.
 
 ```js
 var a = {
