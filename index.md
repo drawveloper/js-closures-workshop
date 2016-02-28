@@ -18,7 +18,6 @@ author:
 - Functions
 - Scopes
 - Closures
-- ES2015 `let`
 - `this` keyword
 
 --
@@ -235,7 +234,7 @@ update(a);
 
 --
 
-Going back to our example...  
+Going back to our example:  
 When `createMyFunction` is **executed**...  
 The *inner function* is created.
 
@@ -284,7 +283,7 @@ add10(2); // 12
 
 --
 
-(We can do make the original example work with `Function.bind`. Can you find out how? Homework 😜)
+(We can make the original example work with `Function.bind`. Can you find out how? Homework 😜)
 
 ```js
 function add(x, y) {
@@ -299,95 +298,46 @@ Questions?
 
 --
 
-## Quick aside: `setTimeout`
-
-```js
-var logBanana = function() {
-  console.log('banana');
-}
-setTimeout(logBanana, 100);
-// After 100ms...
-// 'banana'
-```
-
---
-
 ### The dreaded *async for* bug
 
-What should happen here?
+Let's say you have an array of buttons in the DOM.
+You want to create a click handler for each of them.
 
 ```js
-for (var i = 0; i < 10; i++) {
-  setTimeout(function () {
-    console.log(i);
-  }, 100);
+var buttons = [...];
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  button.addEventListener('click', function() {
+    alert(button.innerText)
+  })
 }
 ```
 
---
-
-If you guessed:
-
-`0, 1, 2, 3, ...`
+Where's the bug?!
 
 --
 
-I'm sorry to disappoint you: 😭
-
-`10, 10, 10, 10, 10, ...`
+All buttons alert `Qux`!
 
 --
 
 What's happening? 🤔
 
-```js
-var i;
-for (i = 0; i < 10; i++) {
-  setTimeout(function () {
-    console.log(i);
-  }, 100);
-}
-```
---
-
 > In JavaScript, closures are created every time a function is created, at function creation time.
 
 --
 
+All functions share the reference for the same variable!
+
 ```js
-var i;
-for (i = 0; i < 10; i++) {
-  myFunction = function () {
-    // Closure created!
-    console.log(i);
-  };
-  setTimeout(myFunction, 100);
+var buttons = [...];
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  button.addEventListener('click', function() {
+    // Reference for button saved!
+    alert(button.innerText)
+  })
 }
-```
-
---
-
-```js
-var i;
-for (i = 0; i < 10; i++) {
-  myFunction = function () {
-    // Reference for i saved
-    console.log(i);
-  };
-  setTimeout(myFunction, 100);
-}
-```
-
---
-
-100 ms later:
-
-```js
-// i is in scope, with value 10
-var i;
-(function () {
-  console.log(i); // 10!
-})();
 ```
 
 --
@@ -397,32 +347,16 @@ var i;
 
 --
 
-So, what we had before:
-
 ```js
-var i;
-for (i = 0; i < 10; i++) {
-  myFunction = function () {
-    console.log(i);
-  };
-  setTimeout(myFunction, 100);
-}
-```
-
---
-
-What we have now:
-
-```js
-createMyFunction = function (myArgument) {
-  return function () {
-    console.log(myArgument);
+var buttons = [...];
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  var createClickHandler = function (el) {
+    return function() {
+      alert(el.innerText)
+    }
   }
-};
-for (var i = 0; i < 10; i++) {
-  // Aha! i is trapped!
-  myFunction = createMyFunction(i);
-  setTimeout(myFunction, 100);
+  button.addEventListener('click', createClickHandler(button))
 }
 ```
 
@@ -431,21 +365,21 @@ for (var i = 0; i < 10; i++) {
 What we have now (IIFE version):
 
 ```js
-for (var i = 0; i < 10; i++) {
-  // Aha! i is trapped!
-  setTimeout((function (myArgument) {
-    return function () {
-      console.log(myArgument);
+var buttons = [...];
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  button.addEventListener('click', (function (el) {
+    return function() {
+      alert(el.innerText)
     }
-  })(i), 100);
+  })(button))
 }
 ```
 
 --
 
-Et voilà: 😁
-
-`0, 1, 2, 3, 4, ...`
+Et voilà! 😁
+Each button alerts its text.
 
 --
 
@@ -459,66 +393,13 @@ When dealing with arrays, you can
 avoid `for` by using `Array.forEach`.
 
 ```js
-var myArray = [1, 2, 3];
-myArray.forEach(function (i) {
-  // Works right off the bat!
-  setTimeout(function () {
-    console.log(i);
-  }, 100);
-});
+buttons.forEach(function(button) {
+  button.addEventListener('click', function() {
+    // Reference for button saved!
+    alert(button.innerText)
+  })
+})
 ```
-
---
-
-### Bonus points: ES2015 let
-
-In `ES2015`, you can declare variables with `let`.
-
-`let` is special because it's **block scoped**.
-
---
-
-```js
-function varTest() {
-  var x = 31;
-  if (true) {
-    var x = 71;  // same variable!
-    console.log(x);  // 71
-  }
-  console.log(x);  // 71
-}
-```
-
---
-
-```js
-function letTest() {
-  let x = 31;
-  if (true) {
-    let x = 71;  // another variable
-    console.log(x);  // 71
-  }
-  console.log(x);  // 31
-}
-```
-
---
-
-> You can use the let keyword to bind variables locally in the scope of for loops. This is different from the var keyword in the head of a for loop, which makes the variables visible in the whole function containing the loop.
-
---
-
-Also works!
-
-```js
-for (let i = 0; i < 10; i++) {
-  setTimeout(function () {
-    console.log(i);
-  }, 100);
-}
-```
-
-`0, 1, 2, 3, 4, ...`
 
 --
 
