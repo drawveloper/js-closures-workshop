@@ -27,97 +27,119 @@ author:
 
 --
 
-# What is a function?
-
---
+### What is a function?
 
 > Generally speaking, a function is a "subprogram" that can be called by code external to the function.
 
 --
 
-# What is scope?
+### What is scope?
+
+> In JavaScript, scope is the set of variables and functions you have access to.
 
 --
-
-> In JavaScript, scope is the set of variables, objects, and functions you have access to.
-
---
-
-## Scope is where state lives.
 
 ```js
-// Scope A
+// Global Scope
 var foo = 1;
-var myFunction = function () {
-  // Scope B
+var myFunction = function (qux) {
+  // myFunction Scope
   var bar = 2;
+  // Function arguments work
+  // just like local variables.
+  // They are also in the scope.
+  console.log(qux);
 };
 console.log(foo) // 1
 console.log(bar) // ReferenceError!
+console.log(qux) // ReferenceError!
 ```
 
 --
 
-> All scopes in JavaScript are created with Function Scope only. They aren’t created by for or while loops or expression statements like if or switch.
+> In JavaScript, scopes are created by **functions**. They aren’t created by `for` or `while` loops or expression statements like `if` or `switch`.
 
 --
 
 ### New function = new scope.
 
-This creates the **scope chain**.
+This creates the **scope chain**: inner functions have access to the scope of outer functions.
 
 ```js
-// Scope A
+// Global Scope
 var myFunction = function () {
-  // Scope B
+  // myFunction Scope
   var myOtherFunction = function () {
-    // Scope C
+    // myOtherFunction Scope
   };
 };
 ```
 
 --
 
-# What is a closure?
+### What is a closure?
 
---
-
-> Whenever you see a function within another function, the inner function has access to the scope of the outer function. This is called Lexical Scope or Closure.
+> Whenever you see a function within another function, the *inner* function **has access to** the scope of the *outer* function.
 
 --
 
 ```js
 var outerFunction = function () {
-  // Scope A
+  // outerFunction Scope
   var foo = 1;
   console.log(foo); // 1
   var innerFunction = function () {
-    // Scope B - access both scopes
+    // innerFunction Scope
+    // access both scopes
     var bar = 2;
     console.log(foo); // 1
     console.log(bar); // 2
   };
+  return innerFunction;
 };
 ```
 
 --
 
-> In a nutshell, a closure is the combination of a function bundled together (enclosed) with references to it’s surrounding state (the lexical environment).
+> A closure is the combination of a function **bundled together** with *references* to its scope chain. It is created at **function creation time**.
 
 --
 
-> In JavaScript, closures are created every time a function is created, at function creation time.
+When an inner function is created, the JavaScript VM saves *references* to all the variables in all the parent scopes.
+
+```js
+var makeFunc = function () {
+  // makeFunc Scope
+  var name = "Mozilla";
+  var displayName = function () {
+    // displayName has access
+    // to makeFunc Scope
+    console.log(name);
+  }
+  return displayName;
+}
+console.log(name) // ReferenceError!
+var myFunc = makeFunc();
+myFunc(); // Mozilla
+```
 
 --
 
-Yeah... so?
+### What we got so far
+
+- Functions create new scopes
+- Functions have access to all outer scopes
+- A closure is *a function* bundled with *references* to the surrounding scope.
+
+--
+
+Enough theory!
 
 --
 
 ### Closure applications
 
 - Data privacy
-- Functional programming (sort of)
 - Stateful functions
 
 --
