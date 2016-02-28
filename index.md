@@ -191,13 +191,84 @@ Questions?
 
 --
 
-# Functional Programming
-# (sort of)
+# Stateful functions
 
 --
 
-Closures are also used in functional programming in JS.  
-In this example, we use something similar to *partial application*.
+Functions can return functions.  
+They are called **stateful functions**, because they *remember* the environment they were created in.
+
+```js
+var createMyFunction = function (myArgument) {
+  return function () {
+    console.log(myArgument);
+  }
+};
+```
+
+--
+# Detour!
+
+**Pass by reference** or **Pass by value**?
+
+--
+
+> In JavaScript, Primitives are passed by value, Objects are passed by "copy of a reference".
+
+--
+
+```js
+function replace(ref) {
+  // this code does _not_ affect the object passed
+  ref = {};
+}
+function update(ref) {
+  // this code _does_ affect the _contents_ of the object
+  ref.key = 'newvalue';
+}
+var a = { key: 'value' };
+// a still has its original value - it's unmodfied
+replace(a);
+// the _contents_ of 'a' are changed
+update(a);
+```
+
+--
+
+Going back to our example...  
+When `createMyFunction` is **executed**...  
+The *inner function* is created.
+
+```js
+var createMyFunction = function (myArgument) {
+  return function () {
+    // Closure created! myArgument == 1
+    console.log(myArgument);
+  }
+};
+var myFunction = createMyFunction(1);
+myFunction() // 1 - primitive
+```
+
+--
+
+###  Partial Application
+
+Partial application is a concept in functional programming.
+Until all arguments are given, a new function is returned.
+
+```js
+function add(x, y) {
+  return x + y;
+}
+// NOT JAVASCRIPT!
+var add5 = add(5); // Only applied first arg
+add5(2); // 7
+```
+
+--
+
+We can use stateful functions to create something similar to *partial application*.
 
 ```js
 function makeAdder(x) {
@@ -213,68 +284,13 @@ add10(2); // 12
 
 --
 
-Similar, because *actual* partial application would let you do this:
+(We can do make the original example work with `Function.bind`. Can you find out how? Homework 😜)
 
 ```js
 function add(x, y) {
   return x + y;
 }
-// NOT JAVASCRIPT!
-var add5 = add(5); // only applied first arg
-add5(2); // 7
-```
-
-(We can do this with `bind`. Can you find out how? Homework 😜)
-
---
-
-Questions?
-
---
-
-# Stateful functions
-
---
-
-Functions can return functions.  
-That `makeAdder` thing has a name.  
-Presenting: the **stateful function**.
-
-```js
-createMyFunction = function (myArgument) {
-  return function () {
-    console.log(myArgument);
-  }
-};
-```
-
---
-
-Ma, look at my scopes! 😎
-
-```js
-createMyFunction = function (myArgument) {
-  // Scope A - myArgument is a local var
-  return function () {
-    // Scope B - can access A
-    console.log(myArgument);
-  }
-};
-```
-
---
-
-When `createMyFunction` is **executed**...  
-The *inner function* is created.
-
-```js
-createMyFunction = function (myArgument) {
-  return function () {
-    // Closure created! myArgument == 1
-    console.log(myArgument);
-  }
-};
-myFunction = createMyFunction(1);
+var add5 = add.bind(???)
 ```
 
 --
@@ -594,3 +610,4 @@ Questions?
 - https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/let
 - https://toddmotto.com/everything-you-wanted-to-know-about-javascript-scope/
 - https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind
+- http://stackoverflow.com/questions/13104494/does-javascript-pass-by-reference
