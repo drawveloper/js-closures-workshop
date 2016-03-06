@@ -49,9 +49,9 @@ var myFunction = function (qux) {
   // They are also in the scope.
   console.log(qux);
 };
-console.log(foo) // 1
-console.log(bar) // ReferenceError!
-console.log(qux) // ReferenceError!
+console.log(foo); // 1
+console.log(bar); // ReferenceError!
+console.log(qux); // ReferenceError!
 ```
 
 --
@@ -210,26 +210,60 @@ var createMyFunction = function (myArgument) {
 
 **Pass by reference** or **Pass by value**?
 
+```js
+function doSomething(a) {
+  a = 3;
+}
+var foo = 42
+doSomething(foo)
+console.log(foo) // ?
+```
+
+--
+
+> Best explanation I ever heard of this.  
+Say I want to share a web page with you.
+
+--
+
+> If I tell you the URL, I'm passing by reference. You can use that URL to see the same web page I can see. If that page is changed, we both see the changes. If you delete the URL, all you're doing is destroying your reference to that page - you're not deleting the actual page itself.
+
+--
+
+> If I print out the page and give you the printout, I'm passing by value. Your page is a disconnected copy of the original. You won't see any subsequent changes, and any changes that you make (e.g. scribbling on your printout) will not show up on the original page. If you destroy the printout, you have actually destroyed your copy of the object - but the original web page remains intact.
+
 --
 
 > In JavaScript, Primitives are passed by value, Objects are passed by "copy of a reference".
 
 --
 
+But variables simply hold references to objects!
+
+--
+
+In JavaScript, **everything is passed by value.**
+
+--
+
 ```js
-function replace(ref) {
-  // this code does _not_ affect the object passed
-  ref = {};
+function doSomething(a) {
+  a = 3;
 }
-function update(ref) {
-  // this code _does_ affect the _contents_ of the object
-  ref.key = 'newvalue';
+var foo = 42
+doSomething(foo)
+console.log(foo) // 42
+```
+
+--
+
+```js
+function doSomething(a) {
+  a.property = 3;
 }
-var a = { key: 'value' };
-// a still has its original value - it's unmodfied
-replace(a);
-// the _contents_ of 'a' are changed
-update(a);
+var foo = {property: 42}
+doSomething(foo)
+console.log(foo.property) // 3
 ```
 
 --
@@ -362,10 +396,11 @@ for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
   var createClickHandler = function (el) {
     return function() {
-      alert(el.innerText)
+      alert(el.innerText);
     }
-  }
-  button.addEventListener('click', createClickHandler(button))
+  };
+  var clickHandler = createClickHandler(button);
+  button.addEventListener('click', clickHandler);
 }
 ```
 <script>
@@ -390,6 +425,7 @@ var buttons = [...];
 for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
   button.addEventListener('click', (function (el) {
+    console.log(el.innerText) // first time: foo!
     return function() {
       alert(el.innerText)
     }
@@ -521,3 +557,5 @@ Questions?
 - https://toddmotto.com/everything-you-wanted-to-know-about-javascript-scope/
 - https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 - http://stackoverflow.com/questions/13104494/does-javascript-pass-by-reference
+- http://stackoverflow.com/questions/373419/whats-the-difference-between-passing-by-reference-vs-passing-by-value
+- http://stackoverflow.com/questions/13266616/primitive-value-vs-reference-value
