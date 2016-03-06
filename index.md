@@ -9,16 +9,19 @@ author:
 --
 
 # JavaScript Scopes and Closures
-## A super fast introduction
+## A super ~~fast~~ thorough introduction
 
 --
 
 ### Contents
 
+- Primitives and objects
+- Variables and references
+- Pass by value
 - Functions
 - Scopes
 - Closures
-- `this` keyword
+- Context
 
 --
 
@@ -26,17 +29,227 @@ author:
 
 --
 
+##Let's get familiar with some  
+##**JavaScript Insides**
+
+--
+
+JavaScript is **not** compiled.  
+JavaScript is **interpreted**.
+
+--
+
+A **Virtual Machine** runs your script.  
+This gives us lots of advantages:
+- Automatic memory allocation
+- Automatic garbage collection
+- Dynamic typing
+- Platform independence
+- etc
+
+--
+
+JavaScript has **primitives** and **objects**.
+
+--
+
+### Primitives
+
+- string `'foo'`
+- number `123`
+- boolean `true`
+- undefined
+- null
+
+--
+
+### Objects
+
+- Objects are aggregations of properties.
+- Properties can reference a primitive.
+  - `{ foo: 'bar', qux: 123 }`
+- Properties can reference an object.
+  - `{ foo: { bar : '123' } }`
+
+--
+
+### Primitive Values
+
+When you initialize a variable with a primitive,  
+this variable holds **the actual value**.  
+
+```js
+var myString = 'test';
+var myNumber = 123;
+```
+
+These variables hold **primitive values**.
+
+--
+
+### Reference Values
+
+When you initialize a variable with an object,  
+this variable holds **the reference to the object**.
+
+```js
+var myObject1 = { foo: 'bar' };
+var myObject2 = { qux: 123 };
+```
+
+These variables hold **reference values**.
+
+--
+
+This is **super incredibly important!**  
+A variable *never holds the object itself*.  
+The object is far away, in a magical land *(heap)*.  
+You only get a **reference** to the object.
+
+```js
+var myRefToObject = { foo: 'bar' };
+```
+
+--
+
+### Recap
+
+- Virtual Machine
+- Primitives
+- Objects
+- Primitive values
+- Reference values
+
+--
+
+Let's talk about **copying values.**
+
+--
+
+### Copying primitive values
+
+Assigning variables copies values.
+
+```js
+var a = 1;
+// Creates a copy of the primitive.
+var b = a;
+console.log(b); // 1
+a = 2;
+console.log(b); // 1
+```
+
+--
+
+### Copying reference values
+
+Assigning variables copies values.
+
+```js
+var a = { foo: 'bar' };
+// Creates a copy of the reference.
+var b = a;
+console.log(b); // { foo: 'bar' }
+a = 2;
+console.log(b); // { foo: 'bar' }
+```
+
+--
+
+### Copying reference values
+
+However, references still point  
+to the same object and can modify it.
+
+```js
+var a = { foo: 'bar' };
+// Create a copy of the reference.
+var b = a;
+b.foo = 2;
+console.log(a); // { foo: 2 }
+```
+
+--
+
+## JavaScript is **pass by value.**
+
+--
+
+### Pass by value
+
+When you call a function, the  *arguments*  
+(or *parameters*) are **copied** into the function.
+
+```js
+var foo = function (myParameter) {
+  myParameter = 'bar'; // Modify your copy
+}
+var a = 1;
+foo(a);
+console.log(a); // 1
+```
+
+--
+
+### Pass by value
+
+Doesn't matter if they are primitives or references.
+
+```js
+var foo = function (myParameter) {
+  // myParameter is the COPY of the reference
+  myParameter = 'bar'; // Modify your copy
+}
+var a = { foo: 123 };
+foo(a);
+console.log(a); // { foo: 123 }
+```
+
+--
+
+### Recap
+
+- A value is a value is a value
+- Values are always copied around
+- JavaScript is pass by value
+
+--
+
 ### What is a function?
 
-> Generally speaking, a function is a "subprogram" that can be called by code external to the function.
+> A function is a "subprogram" that can be called.
 
 --
 
 ### What is scope?
 
-> In JavaScript, scope is the set of variables and functions you have access to.
+> In JavaScript, scope is the set of  
+variables and functions you have access to.
 
 --
+
+### Local variables
+
+When you declare a variable inside a function,  
+it's a **local variable** to that function.
+
+```js
+// Global Scope
+var foo = 1;
+var myFunction = function () {
+  // myFunction Scope
+  // bar is a local variable
+  var bar = 2;
+};
+console.log(foo); // 1
+console.log(bar); // ReferenceError!
+```
+
+--
+
+### Function parameters
+
+Parameters are **the same** as local variables.
 
 ```js
 // Global Scope
@@ -44,10 +257,7 @@ var foo = 1;
 var myFunction = function (qux) {
   // myFunction Scope
   var bar = 2;
-  // Function arguments work
-  // just like local variables.
-  // They are also in the scope.
-  console.log(qux);
+  // Qux and bar are in the same scope.
 };
 console.log(foo); // 1
 console.log(bar); // ReferenceError!
@@ -56,13 +266,16 @@ console.log(qux); // ReferenceError!
 
 --
 
-> In JavaScript, scopes are created by **functions**. They aren’t created by `for` or `while` loops or expression statements like `if` or `switch`.
+> In JavaScript, scopes are created by **functions**.  
+They aren’t created by `for` or `while` loops or  
+expression statements like `if` or `switch`.
 
 --
 
 ### New function = new scope.
 
-This creates the **scope chain**: inner functions have access to the scope of outer functions.
+This creates the **scope chain**: inner functions  
+have access to the scope of outer functions.
 
 ```js
 // Global Scope
@@ -78,7 +291,8 @@ var myFunction = function () {
 
 ### What is a closure?
 
-> Whenever you see a function within another function, the *inner* function **has access to** the scope of the *outer* function.
+> Whenever you see a function **within** another function,  
+the *inner* function **has access to** the scope of the *outer* function.
 
 --
 
@@ -104,7 +318,8 @@ var outerFunction = function () {
 
 --
 
-When an inner function is created, the JavaScript VM saves *references* to all the variables in all the parent scopes.
+When an inner function is created, the JavaScript VM saves  
+*references* to all the variables in all the parent scopes.
 
 ```js
 var makeFunc = function () {
@@ -124,11 +339,12 @@ myFunc(); // Mozilla
 
 --
 
-### What we got so far
+### Recap
 
 - Functions create new scopes
 - Functions have access to all outer scopes
-- A closure is *a function* bundled with *references* to the surrounding scope.
+- A closure is *a function* bundled with  
+*references* to the surrounding scopes
 
 --
 
@@ -206,69 +422,7 @@ var createMyFunction = function (myArgument) {
 ```
 
 --
-# Detour!
 
-**Pass by reference** or **Pass by value**?
-
-```js
-function doSomething(a) {
-  a = 3;
-}
-var foo = 42
-doSomething(foo)
-console.log(foo) // ?
-```
-
---
-
-> Best explanation I ever heard of this.  
-Say I want to share a web page with you.
-
---
-
-> If I tell you the URL, I'm passing by reference. You can use that URL to see the same web page I can see. If that page is changed, we both see the changes. If you delete the URL, all you're doing is destroying your reference to that page - you're not deleting the actual page itself.
-
---
-
-> If I print out the page and give you the printout, I'm passing by value. Your page is a disconnected copy of the original. You won't see any subsequent changes, and any changes that you make (e.g. scribbling on your printout) will not show up on the original page. If you destroy the printout, you have actually destroyed your copy of the object - but the original web page remains intact.
-
---
-
-> In JavaScript, Primitives are passed by value, Objects are passed by "copy of a reference".
-
---
-
-But variables simply hold references to objects!
-
---
-
-In JavaScript, **everything is passed by value.**
-
---
-
-```js
-function doSomething(a) {
-  a = 3;
-}
-var foo = 42
-doSomething(foo)
-console.log(foo) // 42
-```
-
---
-
-```js
-function doSomething(a) {
-  a.property = 3;
-}
-var foo = {property: 42}
-doSomething(foo)
-console.log(foo.property) // 3
-```
-
---
-
-Going back to our example:  
 When `createMyFunction` is **executed**...  
 The *inner function* is created.
 
