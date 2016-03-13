@@ -173,7 +173,7 @@ console.log(b); // 1
 ### Copying reference values
 
 Assigning variables copies reference values.  
-(The same as primite values!)
+(The same as primitive values!)
 
 ```js
 var a = { foo: 'bar' };
@@ -322,7 +322,7 @@ var myFunction = function () {
 ### What is a closure?
 
 A closure is the "**memory**" of a function.  
-A function can *remember* the where it was created.  
+A function can *remember* where it was created.  
 No matter where it ends up, it can always talk about  
 the things in the hills down below (outer scopes).
 
@@ -674,7 +674,7 @@ var b = { age: 2 };
 a.sayAge(); // 1
 //var withoutContext = a.sayAge;
 //withoutContext(); // undefined
-//b.sayAge = a.sayAge; // = withoutContext;
+//b.sayAge = withoutContext;
 //b.sayAge(); // 2
 ```
 
@@ -693,7 +693,7 @@ var b = { age: 2 };
 a.sayAge(); // 1
 var withoutContext = a.sayAge;
 withoutContext(); // undefined
-//b.sayAge = a.sayAge; // = withoutContext;
+//b.sayAge = withoutContext;
 //b.sayAge(); // 2
 ```
 
@@ -712,7 +712,7 @@ var b = { age: 2 };
 a.sayAge(); // 1
 var withoutContext = a.sayAge;
 withoutContext(); // undefined
-b.sayAge = a.sayAge; // = withoutContext;
+b.sayAge = withoutContext;
 b.sayAge(); // 2
 ```
 

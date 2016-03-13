@@ -1096,7 +1096,7 @@ a = <span class="hljs-number">2</span>;
   </div>
   <div class="slide hidden" id="slide-17">
     <section class="slide-content"><h3 id="copying-reference-values">Copying reference values</h3>
-<p>Assigning variables copies reference values.<br>(The same as primite values!)</p>
+<p>Assigning variables copies reference values.<br>(The same as primitive values!)</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = { foo: <span class="hljs-string">'bar'</span> };
 <span class="hljs-comment">// Creates a copy of the reference.</span>
 <span class="hljs-keyword">var</span> b = a;
@@ -1208,7 +1208,7 @@ foo(a);
   </div>
   <div class="slide hidden" id="slide-30">
     <section class="slide-content"><h3 id="what-is-a-closure-">What is a closure?</h3>
-<p>A closure is the &quot;<strong>memory</strong>&quot; of a function.<br>A function can <em>remember</em> the where it was created.<br>No matter where it ends up, it can always talk about<br>the things in the hills down below (outer scopes).</p>
+<p>A closure is the &quot;<strong>memory</strong>&quot; of a function.<br>A function can <em>remember</em> where it was created.<br>No matter where it ends up, it can always talk about<br>the things in the hills down below (outer scopes).</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-31">
@@ -1506,7 +1506,7 @@ wat(); <span class="hljs-comment">// Window</span></code></pre>
 a.sayAge(); <span class="hljs-comment">// 1</span>
 <span class="hljs-comment">//var withoutContext = a.sayAge;</span>
 <span class="hljs-comment">//withoutContext(); // undefined</span>
-<span class="hljs-comment">//b.sayAge = a.sayAge; // = withoutContext;</span>
+<span class="hljs-comment">//b.sayAge = withoutContext;</span>
 <span class="hljs-comment">//b.sayAge(); // 2</span></code></pre>
 </section>
   </div>
@@ -1522,7 +1522,7 @@ a.sayAge(); <span class="hljs-comment">// 1</span>
 a.sayAge(); <span class="hljs-comment">// 1</span>
 <span class="hljs-keyword">var</span> withoutContext = a.sayAge;
 withoutContext(); <span class="hljs-comment">// undefined</span>
-<span class="hljs-comment">//b.sayAge = a.sayAge; // = withoutContext;</span>
+<span class="hljs-comment">//b.sayAge = withoutContext;</span>
 <span class="hljs-comment">//b.sayAge(); // 2</span></code></pre>
 </section>
   </div>
@@ -1538,7 +1538,7 @@ withoutContext(); <span class="hljs-comment">// undefined</span>
 a.sayAge(); <span class="hljs-comment">// 1</span>
 <span class="hljs-keyword">var</span> withoutContext = a.sayAge;
 withoutContext(); <span class="hljs-comment">// undefined</span>
-b.sayAge = a.sayAge; <span class="hljs-comment">// = withoutContext;</span>
+b.sayAge = withoutContext;
 b.sayAge(); <span class="hljs-comment">// 2</span></code></pre>
 </section>
   </div>
