@@ -9,7 +9,7 @@ author:
 --
 
 # JavaScript Scopes and Closures
-## A super ~~fast~~ thorough introduction
+## A super fast introduction
 
 --
 
@@ -25,27 +25,57 @@ author:
 
 --
 
+What we'll solve today:
+
+--
+
+How to hide `age` but still  
+make `looksLike` work?
+
+```js
+function createPerson () {
+  return {
+    age: 25,
+    looksLike: function () {
+      return this.age - 5;
+    }
+  };
+}
+var dude = createPerson();
+dude.looksLike() // 20
+dude.age // 25 - oops!
+```
+
+--
+
+The mistery of the broken buttons. <div class='buttons ex0'><button>Foo</button><button>Bar</button><button>Qux</button></div>
+```js
+var buttons = document.querySelectorAll('button');
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  button.addEventListener('click', function() {
+    alert(button.innerText)
+  })
+}
+```
+<script>
+var buttons = document.querySelectorAll('.ex0 button');
+for (var i = 0; i < buttons.length; i++) {
+  var button = buttons[i];
+  button.addEventListener('click', function() {
+    alert(button.innerText)
+  })
+}
+</script>
+
+--
+
 # First things first!
 
 --
 
-##Let's get familiar with some  
-##**JavaScript Insides**
-
---
-
-JavaScript is **not** compiled.  
-JavaScript is **interpreted**.
-
---
-
-A **Virtual Machine** runs your script.  
-This gives us lots of advantages:
-- Automatic memory allocation
-- Automatic garbage collection
-- Dynamic typing
-- Platform independence
-- etc
+##Let's revisit some  
+##**JavaScript Insides.**
 
 --
 
@@ -114,7 +144,6 @@ var myRefToObject = { foo: 'bar' };
 
 ### Recap
 
-- Virtual Machine
 - Primitives
 - Objects
 - Primitive values
@@ -143,7 +172,8 @@ console.log(b); // 1
 
 ### Copying reference values
 
-Assigning variables copies values.
+Assigning variables copies reference values.  
+(The same as primite values!)
 
 ```js
 var a = { foo: 'bar' };
@@ -224,14 +254,16 @@ console.log(a); // { foo: 123 }
 ### What is scope?
 
 > In JavaScript, scope is the set of  
-variables and functions you have access to.
+variables and functions you have access to.  
+Scopes are created by **functions**.  
 
 --
 
 ### Local variables
 
 When you declare a variable inside a function,  
-it's a **local variable** to that function.
+it's a **local variable** to that function.  
+That means it is **in that scope**.
 
 ```js
 // Global Scope
@@ -247,35 +279,33 @@ console.log(bar); // ReferenceError!
 
 --
 
-### Function parameters
+Scopes are the geography of your code.  
+The global scope is a plain.  
 
-Parameters are **the same** as local variables.
-
-```js
-// Global Scope
-var foo = 1;
-var myFunction = function (qux) {
-  // myFunction Scope
-  var bar = 2;
-  // Qux and bar are in the same scope.
-};
-console.log(foo); // 1
-console.log(bar); // ReferenceError!
-console.log(qux); // ReferenceError!
-```
+![Plains](img/plains.jpg)
 
 --
 
-> In JavaScript, scopes are created by **functions**.  
-They aren’t created by `for` or `while` loops or  
-expression statements like `if` or `switch`.
+A simple function is a hill.  
+That function can look down  
+and see everything in the plain.  
+
+![Hill](img/hill.jpg)
+
+--
+
+Nested functions are mountains.  
+The more deeply nested, the higher.
+
+![Mountain](img/mountains.jpg)
 
 --
 
 ### New function = new scope.
 
 This creates the **scope chain**: inner functions  
-have access to the scope of outer functions.
+have access to the scope of outer functions.  
+(Because you can look down and see.)
 
 ```js
 // Global Scope
@@ -286,6 +316,15 @@ var myFunction = function () {
   };
 };
 ```
+
+--
+
+### What is a closure?
+
+A closure is the "**memory**" of a function.  
+A function can *remember* the where it was created.  
+No matter where it ends up, it can always talk about  
+the things in the hills down below (outer scopes).
 
 --
 
@@ -439,49 +478,6 @@ myFunction() // 1 - primitive
 
 --
 
-###  Partial Application
-
-Partial application is a concept in functional programming.
-Until all arguments are given, a new function is returned.
-
-```js
-function add(x, y) {
-  return x + y;
-}
-// NOT JAVASCRIPT!
-var add5 = add(5); // Only applied first arg
-add5(2); // 7
-```
-
---
-
-We can use stateful functions to create something similar to *partial application*.
-
-```js
-function makeAdder(x) {
-  return function(y) {
-    return x + y;
-  };
-}
-var add5 = makeAdder(5);
-var add10 = makeAdder(10);
-add5(2);  // 7
-add10(2); // 12
-```
-
---
-
-(We can make the original example work with `Function.bind`. Can you find out how? Homework 😜)
-
-```js
-function add(x, y) {
-  return x + y;
-}
-var add5 = add.bind(???)
-```
-
---
-
 Questions?
 
 --
@@ -521,17 +517,18 @@ What's happening? 🤔
 
 --
 
-All functions share the reference for the same variable!  
-Each loop, the variable is overwritten.  
-By the end, all point to the last button. 🐼
+All functions **share the same** variable!  
+Each loop, the **same** variable is overwritten with a new reference.  
+They will always point to only one button.  
+It happens to be the last because it's the last value written.
 
 ```js
 var buttons = [...];
-for (var i = 0; i < buttons.length; i++) {
+for (...) {
   // Overwrites same reference!
   var button = buttons[i];
   button.addEventListener('click', function() {
-    // Reference for button saved!
+    // Shares reference for unique "button" var.
     alert(button.innerText)
   })
 }
@@ -543,12 +540,27 @@ for (var i = 0; i < buttons.length; i++) {
 # Stateful function!
 
 --
+
+What if we create a closure to  
+**force creating a copy** of the reference?
+
+```js
+var createClickHandler = function (el) {
+  return function() {
+    alert(el.innerText);
+  }
+};
+```
+
+--
+Et voilà! 😁
 <div class='buttons ex2'><button>Foo</button><button>Bar</button><button>Qux</button></div>
 ```js
 var buttons = document.querySelectorAll('button');
 for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
   var createClickHandler = function (el) {
+    // will be stored in var clickHandler
     return function() {
       alert(el.innerText);
     }
@@ -579,18 +591,12 @@ var buttons = [...];
 for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
   button.addEventListener('click', (function (el) {
-    console.log(el.innerText) // first time: foo!
     return function() {
       alert(el.innerText)
     }
   })(button))
 }
 ```
-
---
-
-Et voilà! 😁
-Each button alerts its text.
 
 --
 
@@ -642,7 +648,7 @@ b.sayAge() // 2
 
 --
 
-### `this` is a little complicated...
+### `this` defaults to `window`
 
 `this` is `window` if executed on the global context.
 
@@ -655,7 +661,26 @@ wat(); // Window
 
 --
 
-### `this` confusion.
+### Common `this` confusion.
+
+```js
+var a = {
+  age: 1,
+  sayAge: function () {
+    console.log(this.age);
+  }
+};
+var b = { age: 2 };
+a.sayAge(); // 1
+//var withoutContext = a.sayAge;
+//withoutContext(); // undefined
+//b.sayAge = a.sayAge; // = withoutContext;
+//b.sayAge(); // 2
+```
+
+--
+
+### Common `this` confusion.
 
 ```js
 var a = {
@@ -668,8 +693,26 @@ var b = { age: 2 };
 a.sayAge(); // 1
 var withoutContext = a.sayAge;
 withoutContext(); // undefined
-b.sayAge = a.sayAge;
-// b.sayAge = withoutContext;
+//b.sayAge = a.sayAge; // = withoutContext;
+//b.sayAge(); // 2
+```
+
+--
+
+### Common `this` confusion.
+
+```js
+var a = {
+  age: 1,
+  sayAge: function () {
+    console.log(this.age);
+  }
+};
+var b = { age: 2 };
+a.sayAge(); // 1
+var withoutContext = a.sayAge;
+withoutContext(); // undefined
+b.sayAge = a.sayAge; // = withoutContext;
 b.sayAge(); // 2
 ```
 
@@ -686,7 +729,6 @@ b.sayAge(); // 2
 ### Recap: closure applications
 
 - Data privacy
-- Functional programming (sort of)
 - Stateful functions
 
 --
@@ -701,15 +743,10 @@ Questions?
 
 --
 
-## Resources
-
-- http://firstdoit.com/closures/
 - https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-closure-b2f0d2152b36
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures
-- https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/let
 - https://toddmotto.com/everything-you-wanted-to-know-about-javascript-scope/
-- https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 - http://stackoverflow.com/questions/13104494/does-javascript-pass-by-reference
 - http://stackoverflow.com/questions/373419/whats-the-difference-between-passing-by-reference-vs-passing-by-value
 - http://stackoverflow.com/questions/13266616/primitive-value-vs-reference-value
