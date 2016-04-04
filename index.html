@@ -1116,33 +1116,34 @@ b.foo = <span class="hljs-number">2</span>;
 </section>
   </div>
   <div class="slide hidden" id="slide-19">
-    <section class="slide-content"><h2 id="javascript-is-pass-by-value-">JavaScript is <strong>pass by value.</strong></h2>
+    <section class="slide-content"><h3 id="pass-by-value">Pass by value</h3>
+<p>JavaScript is <strong>pass by value.</strong><br>That means when you call a function, the  <em>arguments</em><br>(or <em>parameters</em>) are <strong>copied</strong> into the function.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">myParameter</span>) </span>{
+  <span class="hljs-comment">// myParameter is a COPY, won't affect outside.</span>
+  myParameter = myParameter + <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> myParameter;
+}
+<span class="hljs-keyword">var</span> a = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">var</span> b = foo(a);
+<span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// 1</span>
+<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 2</span></code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-20">
     <section class="slide-content"><h3 id="pass-by-value">Pass by value</h3>
-<p>When you call a function, the  <em>arguments</em><br>(or <em>parameters</em>) are <strong>copied</strong> into the function.</p>
+<p>Doesn&#39;t matter if they are primitives or references.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">myParameter</span>) </span>{
-  myParameter = <span class="hljs-string">'bar'</span>; <span class="hljs-comment">// Modify your copy</span>
+  <span class="hljs-comment">// myParameter is a COPY of the reference</span>
+  myParameter = <span class="hljs-string">'bar'</span>; <span class="hljs-comment">// Overwrite your copy</span>
+  <span class="hljs-keyword">return</span> myParameter; <span class="hljs-comment">// Nothing happens outside</span>
 }
-<span class="hljs-keyword">var</span> a = <span class="hljs-number">1</span>;
-foo(a);
-<span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// 1</span></code></pre>
+<span class="hljs-keyword">var</span> a = { foo: <span class="hljs-number">123</span> };
+<span class="hljs-keyword">var</span> b = foo(a);
+<span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// { foo: 123 }</span>
+<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 'bar'</span></code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-21">
-    <section class="slide-content"><h3 id="pass-by-value">Pass by value</h3>
-<p>Doesn&#39;t matter if they are primitives or references.</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">myParameter</span>) </span>{
-  <span class="hljs-comment">// myParameter is the COPY of the reference</span>
-  myParameter = <span class="hljs-string">'bar'</span>; <span class="hljs-comment">// Modify your copy</span>
-}
-<span class="hljs-keyword">var</span> a = { foo: <span class="hljs-number">123</span> };
-foo(a);
-<span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// { foo: 123 }</span></code></pre>
-</section>
-  </div>
-  <div class="slide hidden" id="slide-22">
     <section class="slide-content"><h3 id="recap">Recap</h3>
 <ul>
 <li>A value is a value is a value</li>
@@ -1151,21 +1152,27 @@ foo(a);
 </ul>
 </section>
   </div>
-  <div class="slide hidden" id="slide-23">
+  <div class="slide hidden" id="slide-22">
     <section class="slide-content"><h3 id="what-is-a-function-">What is a function?</h3>
 <blockquote>
 <p>A function is a &quot;subprogram&quot; that can be called.</p>
 </blockquote>
 </section>
   </div>
-  <div class="slide hidden" id="slide-24">
+  <div class="slide hidden" id="slide-23">
     <section class="slide-content"><h3 id="what-is-scope-">What is scope?</h3>
 <blockquote>
-<p>In JavaScript, scope is the set of<br>variables and functions you have access to.<br>Scopes are created by <strong>functions</strong>.</p>
+<p>In JavaScript, scope is the set of<br>variables and functions you have access to.<br>Scopes are created by <strong>functions</strong>.  </p>
 </blockquote>
+<pre><code class="lang-js"><span class="hljs-comment">// Global Scope</span>
+<span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">var</span> myFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// myFunction Scope</span>
+  <span class="hljs-keyword">var</span> bar = <span class="hljs-number">2</span>;
+};</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-25">
+  <div class="slide hidden" id="slide-24">
     <section class="slide-content"><h3 id="local-variables">Local variables</h3>
 <p>When you declare a variable inside a function,<br>it&#39;s a <strong>local variable</strong> to that function.<br>That means it is <strong>in that scope</strong>.</p>
 <pre><code class="lang-js"><span class="hljs-comment">// Global Scope</span>
@@ -1179,31 +1186,51 @@ foo(a);
 <span class="hljs-built_in">console</span>.log(bar); <span class="hljs-comment">// ReferenceError!</span></code></pre>
 </section>
   </div>
+  <div class="slide hidden" id="slide-25">
+    <section class="slide-content"><h3 id="new-function-new-scope-">New function = new scope.</h3>
+<p>This creates the <strong>scope chain</strong>: inner functions<br>have access to the scope of outer functions.  </p>
+<pre><code class="lang-js"><span class="hljs-comment">// Global Scope</span>
+<span class="hljs-keyword">var</span> outerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// outerFunction Scope</span>
+  <span class="hljs-comment">// can access Global</span>
+  <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// innerFunction Scope</span>
+    <span class="hljs-comment">// can access Global AND outerFunction scope</span>
+  };
+};</code></pre>
+</section>
+  </div>
   <div class="slide hidden" id="slide-26">
+    <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">var</span> outerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// outerFunction Scope</span>
+  <span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// innerFunction Scope</span>
+    <span class="hljs-comment">// access both scopes</span>
+    <span class="hljs-keyword">var</span> bar = <span class="hljs-number">2</span>;
+    <span class="hljs-comment">// It can access foo!</span>
+    <span class="hljs-keyword">return</span> bar + foo;
+  };
+  <span class="hljs-keyword">return</span> innerFunction;
+};
+<span class="hljs-keyword">var</span> myInnerFunc = outerFunction();
+<span class="hljs-keyword">var</span> value = myInnerFunc();
+<span class="hljs-built_in">console</span>.log(value); <span class="hljs-comment">// 3</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-27">
     <section class="slide-content"><p>Scopes are the geography of your code.<br>The global scope is a plain.  </p>
 <p><img src="img/plains.jpg" alt="Plains"></p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-27">
+  <div class="slide hidden" id="slide-28">
     <section class="slide-content"><p>A simple function is a hill.<br>That function can look down<br>and see everything in the plain.  </p>
 <p><img src="img/hill.jpg" alt="Hill"></p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-28">
+  <div class="slide hidden" id="slide-29">
     <section class="slide-content"><p>Nested functions are mountains.<br>The more deeply nested, the higher.</p>
 <p><img src="img/mountains.jpg" alt="Mountain"></p>
-</section>
-  </div>
-  <div class="slide hidden" id="slide-29">
-    <section class="slide-content"><h3 id="new-function-new-scope-">New function = new scope.</h3>
-<p>This creates the <strong>scope chain</strong>: inner functions<br>have access to the scope of outer functions.<br>(Because you can look down and see.)</p>
-<pre><code class="lang-js"><span class="hljs-comment">// Global Scope</span>
-<span class="hljs-keyword">var</span> myFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// myFunction Scope</span>
-  <span class="hljs-keyword">var</span> myOtherFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-comment">// myOtherFunction Scope</span>
-  };
-};</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-30">
@@ -1219,19 +1246,23 @@ foo(a);
 </section>
   </div>
   <div class="slide hidden" id="slide-32">
-    <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">var</span> outerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// outerFunction Scope</span>
+    <section class="slide-content"><p>You can nest as deeply as you need!</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> outerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
-  <span class="hljs-built_in">console</span>.log(foo); <span class="hljs-comment">// 1</span>
   <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-comment">// innerFunction Scope</span>
-    <span class="hljs-comment">// access both scopes</span>
     <span class="hljs-keyword">var</span> bar = <span class="hljs-number">2</span>;
-    <span class="hljs-built_in">console</span>.log(foo); <span class="hljs-comment">// 1</span>
-    <span class="hljs-built_in">console</span>.log(bar); <span class="hljs-comment">// 2</span>
+    <span class="hljs-keyword">var</span> innermostFunction = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">var</span> qux = <span class="hljs-number">4</span>;
+      <span class="hljs-keyword">return</span> qux + bar + foo;
+    }
+    <span class="hljs-keyword">return</span> innermostFunction;
   };
   <span class="hljs-keyword">return</span> innerFunction;
-};</code></pre>
+};
+<span class="hljs-keyword">var</span> myInnerFunc = outerFunction();
+<span class="hljs-keyword">var</span> myInnermostFunc = myInnerFunc();
+<span class="hljs-keyword">var</span> mySum = myInnermostFunction();
+<span class="hljs-built_in">console</span>.log(mySum); <span class="hljs-comment">// 7</span></code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-33">

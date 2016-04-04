@@ -201,22 +201,22 @@ console.log(a); // { foo: 2 }
 
 --
 
-## JavaScript is **pass by value.**
-
---
-
 ### Pass by value
 
-When you call a function, the  *arguments*  
+JavaScript is **pass by value.**  
+That means when you call a function, the  *arguments*  
 (or *parameters*) are **copied** into the function.
 
 ```js
 var foo = function (myParameter) {
-  myParameter = 'bar'; // Modify your copy
+  // myParameter is a COPY, won't affect outside.
+  myParameter = myParameter + 1;
+  return myParameter;
 }
 var a = 1;
-foo(a);
+var b = foo(a);
 console.log(a); // 1
+console.log(b); // 2
 ```
 
 --
@@ -227,12 +227,14 @@ Doesn't matter if they are primitives or references.
 
 ```js
 var foo = function (myParameter) {
-  // myParameter is the COPY of the reference
-  myParameter = 'bar'; // Modify your copy
+  // myParameter is a COPY of the reference
+  myParameter = 'bar'; // Overwrite your copy
+  return myParameter; // Nothing happens outside
 }
 var a = { foo: 123 };
-foo(a);
+var b = foo(a);
 console.log(a); // { foo: 123 }
+console.log(b); // 'bar'
 ```
 
 --
@@ -257,6 +259,15 @@ console.log(a); // { foo: 123 }
 variables and functions you have access to.  
 Scopes are created by **functions**.  
 
+```js
+// Global Scope
+var foo = 1;
+var myFunction = function () {
+  // myFunction Scope
+  var bar = 2;
+};
+```
+
 --
 
 ### Local variables
@@ -275,6 +286,45 @@ var myFunction = function () {
 };
 console.log(foo); // 1
 console.log(bar); // ReferenceError!
+```
+
+--
+
+### New function = new scope.
+
+This creates the **scope chain**: inner functions  
+have access to the scope of outer functions.  
+
+```js
+// Global Scope
+var outerFunction = function () {
+  // outerFunction Scope
+  // can access Global
+  var innerFunction = function () {
+    // innerFunction Scope
+    // can access Global AND outerFunction scope
+  };
+};
+```
+
+--
+
+```js
+var outerFunction = function () {
+  // outerFunction Scope
+  var foo = 1;
+  var innerFunction = function () {
+    // innerFunction Scope
+    // access both scopes
+    var bar = 2;
+    // It can access foo!
+    return bar + foo;
+  };
+  return innerFunction;
+};
+var myInnerFunc = outerFunction();
+var value = myInnerFunc();
+console.log(value); // 3
 ```
 
 --
@@ -301,24 +351,6 @@ The more deeply nested, the higher.
 
 --
 
-### New function = new scope.
-
-This creates the **scope chain**: inner functions  
-have access to the scope of outer functions.  
-(Because you can look down and see.)
-
-```js
-// Global Scope
-var myFunction = function () {
-  // myFunction Scope
-  var myOtherFunction = function () {
-    // myOtherFunction Scope
-  };
-};
-```
-
---
-
 ### What is a closure?
 
 A closure is the "**memory**" of a function.  
@@ -335,20 +367,25 @@ the *inner* function **has access to** the scope of the *outer* function.
 
 --
 
+You can nest as deeply as you need!
+
 ```js
 var outerFunction = function () {
-  // outerFunction Scope
   var foo = 1;
-  console.log(foo); // 1
   var innerFunction = function () {
-    // innerFunction Scope
-    // access both scopes
     var bar = 2;
-    console.log(foo); // 1
-    console.log(bar); // 2
+    var innermostFunction = function() {
+      var qux = 4;
+      return qux + bar + foo;
+    }
+    return innermostFunction;
   };
   return innerFunction;
 };
+var myInnerFunc = outerFunction();
+var myInnermostFunc = myInnerFunc();
+var mySum = myInnermostFunction();
+console.log(mySum); // 7
 ```
 
 --
