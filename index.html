@@ -1369,7 +1369,7 @@ dude.age <span class="hljs-comment">// undefined</span></code></pre>
   }
 };
 <span class="hljs-keyword">var</span> myFunction = createMyFunction(<span class="hljs-number">1</span>);
-myFunction() <span class="hljs-comment">// 1 - primitive</span></code></pre>
+myFunction(); <span class="hljs-comment">// 1 - primitive</span></code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-45">
@@ -1383,17 +1383,19 @@ You want to create a click handler for each of them. <div class='buttons ex1'><b
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'button'</span>);
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; buttons.length; i++) {
   <span class="hljs-keyword">var</span> button = buttons[i];
-  button.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    alert(button.innerText)
-  })
+  <span class="hljs-keyword">var</span> clickHandler = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    alert(button.innerText);
+  };
+  button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
 }</code></pre>
 <script>
 var buttons = document.querySelectorAll('.ex1 button');
 for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
-  button.addEventListener('click', function() {
-    alert(button.innerText)
-  })
+  var clickHandler = function() {
+    alert(button.innerText);
+  };
+  button.addEventListener('click', clickHandler);
 }
 </script></section>
   </div>
@@ -1409,7 +1411,47 @@ for (var i = 0; i < buttons.length; i++) {
 </section>
   </div>
   <div class="slide hidden" id="slide-49">
-    <section class="slide-content"><p>All functions <strong>share the same</strong> variable!<br>Each loop, the <strong>same</strong> variable is overwritten with a new reference.<br>They will always point to only one button.<br>It happens to be the last because it&#39;s the last value written.</p>
+    <section class="slide-content"><p>What do you expect to happen here?</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">var</span> printFoo = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(foo);
+}
+foo = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> alsoPrintFoo = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(foo)
+}
+printFoo();
+alsoPrintFoo();</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-50">
+    <section class="slide-content"><p>Let&#39;s unwrap the <code>for</code> to get a better look.</p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-51">
+    <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">var</span> button;
+<span class="hljs-comment">// First iteration</span>
+button = buttons[<span class="hljs-number">0</span>];
+<span class="hljs-keyword">var</span> clickHandler = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(button.innerText);
+};
+button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
+<span class="hljs-comment">// Second iteration</span>
+button = buttons[<span class="hljs-number">1</span>];
+<span class="hljs-keyword">var</span> clickHandler = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(button.innerText);
+};
+button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
+<span class="hljs-comment">// Third iteration</span>
+button = buttons[<span class="hljs-number">2</span>];
+<span class="hljs-keyword">var</span> clickHandler = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(button.innerText);
+};
+button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-52">
+    <section class="slide-content"><p>All functions <strong>share the same variable</strong>!<br>Each loop, the <strong>same</strong> variable is overwritten with a new reference.<br>They will always point to only one button.<br>It happens to be the last because it&#39;s the last value written.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = [...];
 <span class="hljs-keyword">for</span> (...) {
   <span class="hljs-comment">// Overwrites same reference!</span>
@@ -1421,12 +1463,12 @@ for (var i = 0; i < buttons.length; i++) {
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-50">
+  <div class="slide hidden" id="slide-53">
     <section class="slide-content"><h1 id="solution-">Solution:</h1>
 <h1 id="stateful-function-">Stateful function!</h1>
 </section>
   </div>
-  <div class="slide hidden" id="slide-51">
+  <div class="slide hidden" id="slide-54">
     <section class="slide-content"><p>What if we create a closure to<br><strong>force creating a copy</strong> of the reference?</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> createClickHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -1435,7 +1477,7 @@ for (var i = 0; i < buttons.length; i++) {
 };</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-52">
+  <div class="slide hidden" id="slide-55">
     <section class="slide-content"><p>Et voilà! 😁</p>
 <p><div class='buttons ex2'><button>Foo</button><button>Bar</button><button>Qux</button></div></p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'button'</span>);
@@ -1463,7 +1505,7 @@ for (var i = 0; i < buttons.length; i++) {
 }
 </script></section>
   </div>
-  <div class="slide hidden" id="slide-53">
+  <div class="slide hidden" id="slide-56">
     <section class="slide-content"><p>What we have now (IIFE version):</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = [...];
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; buttons.length; i++) {
@@ -1476,11 +1518,11 @@ for (var i = 0; i < buttons.length; i++) {
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-54">
+  <div class="slide hidden" id="slide-57">
     <section class="slide-content"><p>Questions?</p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-55">
+  <div class="slide hidden" id="slide-58">
     <section class="slide-content"><h3 id="bonus-points-using-foreach">Bonus points: using forEach</h3>
 <p>When dealing with arrays, you can avoid <code>for</code> by using <code>Array.forEach</code>. <div class='buttons ex3'><button>Foo</button><button>Bar</button><button>Qux</button></div></p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = <span class="hljs-built_in">Array</span>.prototype.slice.call(
@@ -1500,11 +1542,11 @@ buttons.forEach(function(button) {
 })
 </script></section>
   </div>
-  <div class="slide hidden" id="slide-56">
+  <div class="slide hidden" id="slide-59">
     <section class="slide-content"><h1 id="context-isnt-scope">Context isnt Scope</h1>
 </section>
   </div>
-  <div class="slide hidden" id="slide-57">
+  <div class="slide hidden" id="slide-60">
     <section class="slide-content"><h3 id="context-is-the-this-keyword">Context is the <code>this</code> keyword</h3>
 <p><code>this</code> is determined by <em>&quot;where&quot;</em> the function was called.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> sayAge = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
@@ -1516,7 +1558,7 @@ a.sayAge() <span class="hljs-comment">// 1</span>
 b.sayAge() <span class="hljs-comment">// 2</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-58">
+  <div class="slide hidden" id="slide-61">
     <section class="slide-content"><h3 id="-this-defaults-to-window-"><code>this</code> defaults to <code>window</code></h3>
 <p><code>this</code> is <code>window</code> if executed on the global context.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> wat = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
@@ -1525,7 +1567,7 @@ b.sayAge() <span class="hljs-comment">// 2</span></code></pre>
 wat(); <span class="hljs-comment">// Window</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-59">
+  <div class="slide hidden" id="slide-62">
     <section class="slide-content"><h3 id="common-this-confusion-">Common <code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
   age: <span class="hljs-number">1</span>,
@@ -1541,7 +1583,7 @@ a.sayAge(); <span class="hljs-comment">// 1</span>
 <span class="hljs-comment">//b.sayAge(); // 2</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-60">
+  <div class="slide hidden" id="slide-63">
     <section class="slide-content"><h3 id="common-this-confusion-">Common <code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
   age: <span class="hljs-number">1</span>,
@@ -1557,7 +1599,7 @@ withoutContext(); <span class="hljs-comment">// undefined</span>
 <span class="hljs-comment">//b.sayAge(); // 2</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-61">
+  <div class="slide hidden" id="slide-64">
     <section class="slide-content"><h3 id="common-this-confusion-">Common <code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
   age: <span class="hljs-number">1</span>,
@@ -1573,12 +1615,12 @@ b.sayAge = withoutContext;
 b.sayAge(); <span class="hljs-comment">// 2</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-62">
+  <div class="slide hidden" id="slide-65">
     <section class="slide-content"><h3 id="advanced-this-">Advanced <code>this</code></h3>
 <p><code>Function.apply()</code><br><code>Function.call()</code><br><code>Function.bind()</code></p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-63">
+  <div class="slide hidden" id="slide-66">
     <section class="slide-content"><h3 id="recap-closure-applications">Recap: closure applications</h3>
 <ul>
 <li>Data privacy</li>
@@ -1586,16 +1628,16 @@ b.sayAge(); <span class="hljs-comment">// 2</span></code></pre>
 </ul>
 </section>
   </div>
-  <div class="slide hidden" id="slide-64">
+  <div class="slide hidden" id="slide-67">
     <section class="slide-content"><p>Questions?</p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-65">
+  <div class="slide hidden" id="slide-68">
     <section class="slide-content"><h1 id="thanks-">Thanks!</h1>
 <h2 id="-">💥💥💥</h2>
 </section>
   </div>
-  <div class="slide hidden" id="slide-66">
+  <div class="slide hidden" id="slide-69">
     <section class="slide-content"><ul>
 <li><a href="https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-closure-b2f0d2152b36">https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-closure-b2f0d2152b36</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions</a></li>
@@ -1607,7 +1649,7 @@ b.sayAge(); <span class="hljs-comment">// 2</span></code></pre>
 </ul>
 </section>
   </div>
-  <div class="slide hidden author-slide" id="slide-67">
+  <div class="slide hidden author-slide" id="slide-70">
     <section class="slide-content"><div class="author">
   <h1 class="name">Guilherme Rodrigues</h1>
     <h3 class="twitter">

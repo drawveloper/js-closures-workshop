@@ -510,7 +510,7 @@ var createMyFunction = function (myArgument) {
   }
 };
 var myFunction = createMyFunction(1);
-myFunction() // 1 - primitive
+myFunction(); // 1 - primitive
 ```
 
 --
@@ -527,18 +527,20 @@ You want to create a click handler for each of them. <div class='buttons ex1'><b
 var buttons = document.querySelectorAll('button');
 for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
-  button.addEventListener('click', function() {
-    alert(button.innerText)
-  })
+  var clickHandler = function() {
+    alert(button.innerText);
+  };
+  button.addEventListener('click', clickHandler);
 }
 ```
 <script>
 var buttons = document.querySelectorAll('.ex1 button');
 for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
-  button.addEventListener('click', function() {
-    alert(button.innerText)
-  })
+  var clickHandler = function() {
+    alert(button.innerText);
+  };
+  button.addEventListener('click', clickHandler);
 }
 </script>
 
@@ -554,7 +556,52 @@ What's happening? 🤔
 
 --
 
-All functions **share the same** variable!  
+What do you expect to happen here?
+
+```js
+var foo = 1;
+var printFoo = function() {
+  console.log(foo);
+}
+foo = 2;
+var alsoPrintFoo = function() {
+  console.log(foo)
+}
+printFoo();
+alsoPrintFoo();
+```
+
+--
+
+Let's unwrap the `for` to get a better look.
+
+--
+
+```js
+var button;
+// First iteration
+button = buttons[0];
+var clickHandler = function() {
+  alert(button.innerText);
+};
+button.addEventListener('click', clickHandler);
+// Second iteration
+button = buttons[1];
+var clickHandler = function() {
+  alert(button.innerText);
+};
+button.addEventListener('click', clickHandler);
+// Third iteration
+button = buttons[2];
+var clickHandler = function() {
+  alert(button.innerText);
+};
+button.addEventListener('click', clickHandler);
+```
+
+--
+
+All functions **share the same variable**!  
 Each loop, the **same** variable is overwritten with a new reference.  
 They will always point to only one button.  
 It happens to be the last because it's the last value written.
