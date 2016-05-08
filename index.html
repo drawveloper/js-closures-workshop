@@ -947,7 +947,6 @@ pre .hljs-xml .hljs-cdata {
 }
 
   </style>
-    <script async src="http://localhost:35729/livereload.js"></script>
 </head>
 <body>
     <div class="progress">
@@ -1232,8 +1231,8 @@ b.foo = <span class="hljs-number">2</span>;
   };
   <span class="hljs-keyword">return</span> innerFunction;
 };
-<span class="hljs-built_in">console</span>.log(bar) <span class="hljs-comment">// ReferenceError!</span>
 <span class="hljs-keyword">var</span> myInnerFunc = outerFunction();
+<span class="hljs-built_in">console</span>.log(foo); <span class="hljs-comment">// ReferenceError!</span>
 <span class="hljs-keyword">var</span> value = myInnerFunc();
 <span class="hljs-built_in">console</span>.log(value); <span class="hljs-comment">// 3</span></code></pre>
 </section>

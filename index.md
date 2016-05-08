@@ -348,8 +348,8 @@ var outerFunction = function () {
   };
   return innerFunction;
 };
-console.log(bar) // ReferenceError!
 var myInnerFunc = outerFunction();
+console.log(foo); // ReferenceError!
 var value = myInnerFunc();
 console.log(value); // 3
 ```
