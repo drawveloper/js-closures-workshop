@@ -947,6 +947,7 @@ pre .hljs-xml .hljs-cdata {
 }
 
   </style>
+    <script async src="http://localhost:35729/livereload.js"></script>
 </head>
 <body>
     <div class="progress">
@@ -1164,48 +1165,66 @@ b.foo = <span class="hljs-number">2</span>;
 <blockquote>
 <p>In JavaScript, scope is the set of<br>variables and functions you have access to.<br>Scopes are created by <strong>functions</strong>.  </p>
 </blockquote>
-<pre><code class="lang-js"><span class="hljs-comment">// Global Scope</span>
+<pre><code class="lang-js"><span class="hljs-comment">// Global scope</span>
 <span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
 <span class="hljs-keyword">var</span> myFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// myFunction Scope</span>
-  <span class="hljs-keyword">var</span> bar = <span class="hljs-number">2</span>;
+  <span class="hljs-comment">// myFunction scope</span>
+  <span class="hljs-keyword">var</span> bar = <span class="hljs-number">2</span>; <span class="hljs-comment">// Local variable</span>
 };</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-24">
-    <section class="slide-content"><h3 id="local-variables">Local variables</h3>
-<p>When you declare a variable inside a function,<br>it&#39;s a <strong>local variable</strong> to that function.<br>That means it is <strong>in that scope</strong>.</p>
-<pre><code class="lang-js"><span class="hljs-comment">// Global Scope</span>
-<span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
-<span class="hljs-keyword">var</span> myFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// myFunction Scope</span>
-  <span class="hljs-comment">// bar is a local variable</span>
-  <span class="hljs-keyword">var</span> bar = <span class="hljs-number">2</span>;
-};
-<span class="hljs-built_in">console</span>.log(foo); <span class="hljs-comment">// 1</span>
-<span class="hljs-built_in">console</span>.log(bar); <span class="hljs-comment">// ReferenceError!</span></code></pre>
+    <section class="slide-content"><h3 id="what-is-a-closure-">What is a closure?</h3>
+<blockquote>
+<p>Whenever you see a function <strong>within</strong> another function,<br>the <em>inner</em> function <strong>has access to</strong> the scope of the <em>outer</em> function.</p>
+</blockquote>
+<pre><code class="lang-js"><span class="hljs-comment">// Global scope</span>
+<span class="hljs-keyword">var</span> outerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// outerFunction scope</span>
+  <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// innerFunction scope</span>
+  };
+};</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-25">
     <section class="slide-content"><h3 id="new-function-new-scope-">New function = new scope.</h3>
 <p>This creates the <strong>scope chain</strong>: inner functions<br>have access to the scope of outer functions.  </p>
-<pre><code class="lang-js"><span class="hljs-comment">// Global Scope</span>
+<pre><code class="lang-js"><span class="hljs-comment">// Global scope</span>
 <span class="hljs-keyword">var</span> outerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// outerFunction Scope</span>
-  <span class="hljs-comment">// can access Global</span>
+  <span class="hljs-comment">// outerFunction scope - can access Global</span>
   <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-comment">// innerFunction Scope</span>
-    <span class="hljs-comment">// can access Global AND outerFunction scope</span>
+    <span class="hljs-comment">// innerFunction scope - can access Global AND outer scopes</span>
   };
 };</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-26">
+    <section class="slide-content"><p>Scopes are the geography of your code.<br>The global scope is a plain.  </p>
+<p><img src="img/plains.jpg" alt="Plains"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-27">
+    <section class="slide-content"><p>A simple function is a hill.<br>That function can look down<br>and see everything in the plain.  </p>
+<p><img src="img/hill.jpg" alt="Hill"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-28">
+    <section class="slide-content"><p>Nested functions are mountains.<br>The more deeply nested, the higher.</p>
+<p><img src="img/mountains.jpg" alt="Mountain"></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-29">
+    <section class="slide-content"><h3 id="what-is-a-closure-">What is a closure?</h3>
+<p>A closure is the &quot;<strong>memory</strong>&quot; of a function.<br>A function can <em>remember</em> where it was created.<br>No matter where it ends up, it can always talk about<br>the things in the hills down below (outer scopes).</p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-30">
     <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">var</span> outerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// outerFunction Scope</span>
+  <span class="hljs-comment">// outerFunction scope</span>
   <span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
   <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-comment">// innerFunction Scope</span>
+    <span class="hljs-comment">// innerFunction scope</span>
     <span class="hljs-comment">// access both scopes</span>
     <span class="hljs-keyword">var</span> bar = <span class="hljs-number">2</span>;
     <span class="hljs-comment">// It can access foo!</span>
@@ -1213,82 +1232,26 @@ b.foo = <span class="hljs-number">2</span>;
   };
   <span class="hljs-keyword">return</span> innerFunction;
 };
+<span class="hljs-built_in">console</span>.log(bar) <span class="hljs-comment">// ReferenceError!</span>
 <span class="hljs-keyword">var</span> myInnerFunc = outerFunction();
 <span class="hljs-keyword">var</span> value = myInnerFunc();
 <span class="hljs-built_in">console</span>.log(value); <span class="hljs-comment">// 3</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-27">
-    <section class="slide-content"><p>Scopes are the geography of your code.<br>The global scope is a plain.  </p>
-<p><img src="img/plains.jpg" alt="Plains"></p>
-</section>
-  </div>
-  <div class="slide hidden" id="slide-28">
-    <section class="slide-content"><p>A simple function is a hill.<br>That function can look down<br>and see everything in the plain.  </p>
-<p><img src="img/hill.jpg" alt="Hill"></p>
-</section>
-  </div>
-  <div class="slide hidden" id="slide-29">
-    <section class="slide-content"><p>Nested functions are mountains.<br>The more deeply nested, the higher.</p>
-<p><img src="img/mountains.jpg" alt="Mountain"></p>
-</section>
-  </div>
-  <div class="slide hidden" id="slide-30">
-    <section class="slide-content"><h3 id="what-is-a-closure-">What is a closure?</h3>
-<p>A closure is the &quot;<strong>memory</strong>&quot; of a function.<br>A function can <em>remember</em> where it was created.<br>No matter where it ends up, it can always talk about<br>the things in the hills down below (outer scopes).</p>
-</section>
-  </div>
   <div class="slide hidden" id="slide-31">
-    <section class="slide-content"><h3 id="what-is-a-closure-">What is a closure?</h3>
-<blockquote>
-<p>Whenever you see a function <strong>within</strong> another function,<br>the <em>inner</em> function <strong>has access to</strong> the scope of the <em>outer</em> function.</p>
+    <section class="slide-content"><blockquote>
+<p>A closure is the combination of a function <strong>bundled together</strong> with <em>references</em> to its scope chain.</p>
 </blockquote>
+<pre><code class="lang-js"><span class="hljs-comment">// Global scope</span>
+<span class="hljs-keyword">var</span> outerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// outerFunction scope - can access Global</span>
+  <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// innerFunction scope - can access Global AND outer scopes</span>
+  };
+};</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-32">
-    <section class="slide-content"><p>You can nest as deeply as you need!</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> outerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
-  <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">var</span> bar = <span class="hljs-number">2</span>;
-    <span class="hljs-keyword">var</span> innermostFunction = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-      <span class="hljs-keyword">var</span> qux = <span class="hljs-number">4</span>;
-      <span class="hljs-keyword">return</span> qux + bar + foo;
-    }
-    <span class="hljs-keyword">return</span> innermostFunction;
-  };
-  <span class="hljs-keyword">return</span> innerFunction;
-};
-<span class="hljs-keyword">var</span> myInnerFunc = outerFunction();
-<span class="hljs-keyword">var</span> myInnermostFunc = myInnerFunc();
-<span class="hljs-keyword">var</span> mySum = myInnermostFunction();
-<span class="hljs-built_in">console</span>.log(mySum); <span class="hljs-comment">// 7</span></code></pre>
-</section>
-  </div>
-  <div class="slide hidden" id="slide-33">
-    <section class="slide-content"><blockquote>
-<p>A closure is the combination of a function <strong>bundled together</strong> with <em>references</em> to its scope chain. It is created at <strong>function creation time</strong>.</p>
-</blockquote>
-</section>
-  </div>
-  <div class="slide hidden" id="slide-34">
-    <section class="slide-content"><p>When an inner function is created, the JavaScript VM saves<br><em>references</em> to all the variables in all the parent scopes.</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> makeFunc = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// makeFunc Scope</span>
-  <span class="hljs-keyword">var</span> name = <span class="hljs-string">"Mozilla"</span>;
-  <span class="hljs-keyword">var</span> displayName = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-comment">// displayName has access</span>
-    <span class="hljs-comment">// to makeFunc Scope</span>
-    <span class="hljs-built_in">console</span>.log(name);
-  }
-  <span class="hljs-keyword">return</span> displayName;
-}
-<span class="hljs-built_in">console</span>.log(name) <span class="hljs-comment">// ReferenceError!</span>
-<span class="hljs-keyword">var</span> myFunc = makeFunc();
-myFunc(); <span class="hljs-comment">// Mozilla</span></code></pre>
-</section>
-  </div>
-  <div class="slide hidden" id="slide-35">
     <section class="slide-content"><h3 id="recap">Recap</h3>
 <ul>
 <li>Functions create new scopes</li>
@@ -1297,11 +1260,11 @@ myFunc(); <span class="hljs-comment">// Mozilla</span></code></pre>
 </ul>
 </section>
   </div>
-  <div class="slide hidden" id="slide-36">
+  <div class="slide hidden" id="slide-33">
     <section class="slide-content"><p>Enough theory!</p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-37">
+  <div class="slide hidden" id="slide-34">
     <section class="slide-content"><h3 id="closure-applications">Closure applications</h3>
 <ul>
 <li>Data privacy</li>
@@ -1309,11 +1272,11 @@ myFunc(); <span class="hljs-comment">// Mozilla</span></code></pre>
 </ul>
 </section>
   </div>
-  <div class="slide hidden" id="slide-38">
+  <div class="slide hidden" id="slide-35">
     <section class="slide-content"><h1 id="data-privacy">Data privacy</h1>
 </section>
   </div>
-  <div class="slide hidden" id="slide-39">
+  <div class="slide hidden" id="slide-36">
     <section class="slide-content"><p>Imagine you want to create a person<br>object with a <code>looksLike</code> function,<br>but hide their age:</p>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createPerson</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> {
@@ -1328,7 +1291,7 @@ dude.looksLike() <span class="hljs-comment">// 20</span>
 dude.age <span class="hljs-comment">// 25 - oops!</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-40">
+  <div class="slide hidden" id="slide-37">
     <section class="slide-content"><p>Closures are useful to hide data<br>from the outside world.</p>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createPerson</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">var</span> age = <span class="hljs-number">25</span>;
@@ -1343,15 +1306,15 @@ dude.looksLike() <span class="hljs-comment">// 20</span>
 dude.age <span class="hljs-comment">// undefined</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-41">
+  <div class="slide hidden" id="slide-38">
     <section class="slide-content"><p>Questions?</p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-42">
+  <div class="slide hidden" id="slide-39">
     <section class="slide-content"><h1 id="stateful-functions">Stateful functions</h1>
 </section>
   </div>
-  <div class="slide hidden" id="slide-43">
+  <div class="slide hidden" id="slide-40">
     <section class="slide-content"><p>Functions can return functions.<br>They are called <strong>stateful functions</strong>, because they <em>remember</em> the environment they were created in.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> createMyFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">myArgument</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
@@ -1360,7 +1323,7 @@ dude.age <span class="hljs-comment">// undefined</span></code></pre>
 };</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-44">
+  <div class="slide hidden" id="slide-41">
     <section class="slide-content"><p>When <code>createMyFunction</code> is <strong>executed</strong>...<br>The <em>inner function</em> is created.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> createMyFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">myArgument</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
@@ -1372,11 +1335,11 @@ dude.age <span class="hljs-comment">// undefined</span></code></pre>
 myFunction(); <span class="hljs-comment">// 1 - primitive</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-45">
+  <div class="slide hidden" id="slide-42">
     <section class="slide-content"><p>Questions?</p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-46">
+  <div class="slide hidden" id="slide-43">
     <section class="slide-content"><h3 id="the-dreaded-async-for-bug">The dreaded <em>async for</em> bug</h3>
 <p>Let&#39;s say you have an array of buttons in the DOM.
 You want to create a click handler for each of them. <div class='buttons ex1'><button>Foo</button><button>Bar</button><button>Qux</button></div></p>
@@ -1399,18 +1362,18 @@ for (var i = 0; i < buttons.length; i++) {
 }
 </script></section>
   </div>
-  <div class="slide hidden" id="slide-47">
+  <div class="slide hidden" id="slide-44">
     <section class="slide-content"><p>All buttons alert <code>Qux</code>!</p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-48">
+  <div class="slide hidden" id="slide-45">
     <section class="slide-content"><p>What&#39;s happening? 🤔</p>
 <blockquote>
 <p>In JavaScript, closures are created every time a function is created, at function creation time.</p>
 </blockquote>
 </section>
   </div>
-  <div class="slide hidden" id="slide-49">
+  <div class="slide hidden" id="slide-46">
     <section class="slide-content"><p>What do you expect to happen here?</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
 <span class="hljs-keyword">var</span> printFoo = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -1418,17 +1381,17 @@ for (var i = 0; i < buttons.length; i++) {
 }
 foo = <span class="hljs-number">2</span>;
 <span class="hljs-keyword">var</span> alsoPrintFoo = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-built_in">console</span>.log(foo)
+  <span class="hljs-built_in">console</span>.log(foo);
 }
 printFoo();
 alsoPrintFoo();</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-50">
+  <div class="slide hidden" id="slide-47">
     <section class="slide-content"><p>Let&#39;s unwrap the <code>for</code> to get a better look.</p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-51">
+  <div class="slide hidden" id="slide-48">
     <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">var</span> button;
 <span class="hljs-comment">// First iteration</span>
 button = buttons[<span class="hljs-number">0</span>];
@@ -1450,7 +1413,7 @@ button = buttons[<span class="hljs-number">2</span>];
 button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-52">
+  <div class="slide hidden" id="slide-49">
     <section class="slide-content"><p>All functions <strong>share the same variable</strong>!<br>Each loop, the <strong>same</strong> variable is overwritten with a new reference.<br>They will always point to only one button.<br>It happens to be the last because it&#39;s the last value written.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = [...];
 <span class="hljs-keyword">for</span> (...) {
@@ -1463,12 +1426,12 @@ button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-53">
+  <div class="slide hidden" id="slide-50">
     <section class="slide-content"><h1 id="solution-">Solution:</h1>
 <h1 id="stateful-function-">Stateful function!</h1>
 </section>
   </div>
-  <div class="slide hidden" id="slide-54">
+  <div class="slide hidden" id="slide-51">
     <section class="slide-content"><p>What if we create a closure to<br><strong>force creating a copy</strong> of the reference?</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> createClickHandler = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">el</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -1477,7 +1440,7 @@ button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
 };</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-55">
+  <div class="slide hidden" id="slide-52">
     <section class="slide-content"><p>Et voilà! 😁</p>
 <p><div class='buttons ex2'><button>Foo</button><button>Bar</button><button>Qux</button></div></p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'button'</span>);
@@ -1505,7 +1468,7 @@ for (var i = 0; i < buttons.length; i++) {
 }
 </script></section>
   </div>
-  <div class="slide hidden" id="slide-56">
+  <div class="slide hidden" id="slide-53">
     <section class="slide-content"><p>What we have now (IIFE version):</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = [...];
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; buttons.length; i++) {
@@ -1518,11 +1481,11 @@ for (var i = 0; i < buttons.length; i++) {
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-57">
+  <div class="slide hidden" id="slide-54">
     <section class="slide-content"><p>Questions?</p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-58">
+  <div class="slide hidden" id="slide-55">
     <section class="slide-content"><h3 id="bonus-points-using-foreach">Bonus points: using forEach</h3>
 <p>When dealing with arrays, you can avoid <code>for</code> by using <code>Array.forEach</code>. <div class='buttons ex3'><button>Foo</button><button>Bar</button><button>Qux</button></div></p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> buttons = <span class="hljs-built_in">Array</span>.prototype.slice.call(
@@ -1542,11 +1505,11 @@ buttons.forEach(function(button) {
 })
 </script></section>
   </div>
-  <div class="slide hidden" id="slide-59">
+  <div class="slide hidden" id="slide-56">
     <section class="slide-content"><h1 id="context-isnt-scope">Context isnt Scope</h1>
 </section>
   </div>
-  <div class="slide hidden" id="slide-60">
+  <div class="slide hidden" id="slide-57">
     <section class="slide-content"><h3 id="context-is-the-this-keyword">Context is the <code>this</code> keyword</h3>
 <p><code>this</code> is determined by <em>&quot;where&quot;</em> the function was called.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> sayAge = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
@@ -1558,7 +1521,7 @@ a.sayAge() <span class="hljs-comment">// 1</span>
 b.sayAge() <span class="hljs-comment">// 2</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-61">
+  <div class="slide hidden" id="slide-58">
     <section class="slide-content"><h3 id="-this-defaults-to-window-"><code>this</code> defaults to <code>window</code></h3>
 <p><code>this</code> is <code>window</code> if executed on the global context.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> wat = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
@@ -1567,7 +1530,7 @@ b.sayAge() <span class="hljs-comment">// 2</span></code></pre>
 wat(); <span class="hljs-comment">// Window</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-62">
+  <div class="slide hidden" id="slide-59">
     <section class="slide-content"><h3 id="common-this-confusion-">Common <code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
   age: <span class="hljs-number">1</span>,
@@ -1583,7 +1546,7 @@ a.sayAge(); <span class="hljs-comment">// 1</span>
 <span class="hljs-comment">//b.sayAge(); // 2</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-63">
+  <div class="slide hidden" id="slide-60">
     <section class="slide-content"><h3 id="common-this-confusion-">Common <code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
   age: <span class="hljs-number">1</span>,
@@ -1599,7 +1562,7 @@ withoutContext(); <span class="hljs-comment">// undefined</span>
 <span class="hljs-comment">//b.sayAge(); // 2</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-64">
+  <div class="slide hidden" id="slide-61">
     <section class="slide-content"><h3 id="common-this-confusion-">Common <code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
   age: <span class="hljs-number">1</span>,
@@ -1615,12 +1578,12 @@ b.sayAge = withoutContext;
 b.sayAge(); <span class="hljs-comment">// 2</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-65">
+  <div class="slide hidden" id="slide-62">
     <section class="slide-content"><h3 id="advanced-this-">Advanced <code>this</code></h3>
 <p><code>Function.apply()</code><br><code>Function.call()</code><br><code>Function.bind()</code></p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-66">
+  <div class="slide hidden" id="slide-63">
     <section class="slide-content"><h3 id="recap-closure-applications">Recap: closure applications</h3>
 <ul>
 <li>Data privacy</li>
@@ -1628,16 +1591,16 @@ b.sayAge(); <span class="hljs-comment">// 2</span></code></pre>
 </ul>
 </section>
   </div>
-  <div class="slide hidden" id="slide-67">
+  <div class="slide hidden" id="slide-64">
     <section class="slide-content"><p>Questions?</p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-68">
+  <div class="slide hidden" id="slide-65">
     <section class="slide-content"><h1 id="thanks-">Thanks!</h1>
 <h2 id="-">💥💥💥</h2>
 </section>
   </div>
-  <div class="slide hidden" id="slide-69">
+  <div class="slide hidden" id="slide-66">
     <section class="slide-content"><ul>
 <li><a href="https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-closure-b2f0d2152b36">https://medium.com/javascript-scene/master-the-javascript-interview-what-is-a-closure-b2f0d2152b36</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions</a></li>
@@ -1649,7 +1612,7 @@ b.sayAge(); <span class="hljs-comment">// 2</span></code></pre>
 </ul>
 </section>
   </div>
-  <div class="slide hidden author-slide" id="slide-70">
+  <div class="slide hidden author-slide" id="slide-67">
     <section class="slide-content"><div class="author">
   <h1 class="name">Guilherme Rodrigues</h1>
     <h3 class="twitter">

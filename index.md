@@ -260,32 +260,29 @@ variables and functions you have access to.
 Scopes are created by **functions**.  
 
 ```js
-// Global Scope
+// Global scope
 var foo = 1;
 var myFunction = function () {
-  // myFunction Scope
-  var bar = 2;
+  // myFunction scope
+  var bar = 2; // Local variable
 };
 ```
 
 --
 
-### Local variables
+### What is a closure?
 
-When you declare a variable inside a function,  
-it's a **local variable** to that function.  
-That means it is **in that scope**.
+> Whenever you see a function **within** another function,  
+the *inner* function **has access to** the scope of the *outer* function.
 
 ```js
-// Global Scope
-var foo = 1;
-var myFunction = function () {
-  // myFunction Scope
-  // bar is a local variable
-  var bar = 2;
+// Global scope
+var outerFunction = function () {
+  // outerFunction scope
+  var innerFunction = function () {
+    // innerFunction scope
+  };
 };
-console.log(foo); // 1
-console.log(bar); // ReferenceError!
 ```
 
 --
@@ -296,35 +293,13 @@ This creates the **scope chain**: inner functions
 have access to the scope of outer functions.  
 
 ```js
-// Global Scope
+// Global scope
 var outerFunction = function () {
-  // outerFunction Scope
-  // can access Global
+  // outerFunction scope - can access Global
   var innerFunction = function () {
-    // innerFunction Scope
-    // can access Global AND outerFunction scope
+    // innerFunction scope - can access Global AND outer scopes
   };
 };
-```
-
---
-
-```js
-var outerFunction = function () {
-  // outerFunction Scope
-  var foo = 1;
-  var innerFunction = function () {
-    // innerFunction Scope
-    // access both scopes
-    var bar = 2;
-    // It can access foo!
-    return bar + foo;
-  };
-  return innerFunction;
-};
-var myInnerFunc = outerFunction();
-var value = myInnerFunc();
-console.log(value); // 3
 ```
 
 --
@@ -360,57 +335,37 @@ the things in the hills down below (outer scopes).
 
 --
 
-### What is a closure?
-
-> Whenever you see a function **within** another function,  
-the *inner* function **has access to** the scope of the *outer* function.
-
---
-
-You can nest as deeply as you need!
-
 ```js
 var outerFunction = function () {
+  // outerFunction scope
   var foo = 1;
   var innerFunction = function () {
+    // innerFunction scope
+    // access both scopes
     var bar = 2;
-    var innermostFunction = function() {
-      var qux = 4;
-      return qux + bar + foo;
-    }
-    return innermostFunction;
+    // It can access foo!
+    return bar + foo;
   };
   return innerFunction;
 };
+console.log(bar) // ReferenceError!
 var myInnerFunc = outerFunction();
-var myInnermostFunc = myInnerFunc();
-var mySum = myInnermostFunction();
-console.log(mySum); // 7
+var value = myInnerFunc();
+console.log(value); // 3
 ```
 
 --
 
-> A closure is the combination of a function **bundled together** with *references* to its scope chain. It is created at **function creation time**.
-
---
-
-When an inner function is created, the JavaScript VM saves  
-*references* to all the variables in all the parent scopes.
+> A closure is the combination of a function **bundled together** with *references* to its scope chain.
 
 ```js
-var makeFunc = function () {
-  // makeFunc Scope
-  var name = "Mozilla";
-  var displayName = function () {
-    // displayName has access
-    // to makeFunc Scope
-    console.log(name);
-  }
-  return displayName;
-}
-console.log(name) // ReferenceError!
-var myFunc = makeFunc();
-myFunc(); // Mozilla
+// Global scope
+var outerFunction = function () {
+  // outerFunction scope - can access Global
+  var innerFunction = function () {
+    // innerFunction scope - can access Global AND outer scopes
+  };
+};
 ```
 
 --
@@ -565,7 +520,7 @@ var printFoo = function() {
 }
 foo = 2;
 var alsoPrintFoo = function() {
-  console.log(foo)
+  console.log(foo);
 }
 printFoo();
 alsoPrintFoo();
