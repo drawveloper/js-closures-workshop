@@ -1,7 +1,7 @@
 {
   "name": "js-closures-workshop",
   "version": "0.1.0",
-  "description": "Presentation for the \"JavaScript Scope and Closures\" Thinkful workshop",
+  "description": "Presentation for the \"JavaScript Scopes and Closures\" Thinkful workshop",
   "main": "index.html",
   "scripts": {
     "build": "cleaver index.md",

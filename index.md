@@ -79,7 +79,7 @@ for (var i = 0; i < buttons.length; i++) {
 
 --
 
-JavaScript has **primitives** and **objects**.
+JavaScript data types are divided into **primitives** and **objects**.
 
 --
 
@@ -445,27 +445,17 @@ Functions can return functions.
 They are called **stateful functions**, because they *remember* the environment they were created in.
 
 ```js
+var foo = 1;
 var createMyFunction = function (myArgument) {
   return function () {
     console.log(myArgument);
   }
 };
-```
-
---
-
-When `createMyFunction` is **executed**...  
-The *inner function* is created.
-
-```js
-var createMyFunction = function (myArgument) {
-  return function () {
-    // Closure created! myArgument == 1
-    console.log(myArgument);
-  }
-};
-var myFunction = createMyFunction(1);
-myFunction(); // 1 - primitive
+// Boom - foo is COPIED into the function as myArgument.
+var myFunction = createMyFunction(foo);
+foo = 2;
+console.log(foo); // 2 - changed outside.
+myFunction(); // 1 - no matter. foo was COPIED!
 ```
 
 --
@@ -476,8 +466,8 @@ Questions?
 
 ### The dreaded *async for* bug
 
-Let's say you have an array of buttons in the DOM.
-You want to create a click handler for each of them. <div class='buttons ex1'><button>Foo</button><button>Bar</button><button>Qux</button></div>
+Let's say you have some buttons in the DOM.
+You want to create a click handler for each of them that alerts their content. <div class='buttons ex1'><button>Foo</button><button>Bar</button><button>Qux</button></div>
 ```js
 var buttons = document.querySelectorAll('button');
 for (var i = 0; i < buttons.length; i++) {
@@ -528,6 +518,42 @@ alsoPrintFoo();
 
 --
 
+What do you expect to happen here?
+
+```js
+var foo = 1;
+var printFoo = function() {
+  console.log(foo);
+}
+foo = 2;
+var alsoPrintFoo = function() {
+  console.log(foo);
+}
+printFoo(); // 2
+alsoPrintFoo(); // 2
+```
+
+--
+
+## Let's use a stateful function.
+
+--
+
+```js
+var foo = 1;
+var makePrintFoo = function(myArgument) {
+  return function printFoo() {
+    console.log(myCopiedArgument);
+  }
+}
+var printFoo = makePrintFoo(foo);
+foo = 2;
+printFoo(); // 1
+```
+
+--
+
+Back to our dreaded `for`!  
 Let's unwrap the `for` to get a better look.
 
 --
@@ -599,7 +625,6 @@ var buttons = document.querySelectorAll('button');
 for (var i = 0; i < buttons.length; i++) {
   var button = buttons[i];
   var createClickHandler = function (el) {
-    // will be stored in var clickHandler
     return function() {
       alert(el.innerText);
     }
@@ -647,9 +672,8 @@ Questions?
 
 When dealing with arrays, you can avoid `for` by using `Array.forEach`. <div class='buttons ex3'><button>Foo</button><button>Bar</button><button>Qux</button></div>
 ```js
-var buttons = Array.prototype.slice.call(
-  document.querySelectorAll('button')
-);
+// Convert NodeList to Array
+var buttons = [].slice.call(document.querySelectorAll('button'));
 buttons.forEach(function(button) {
   button.addEventListener('click', function() {
     alert(button.innerText)
@@ -657,7 +681,7 @@ buttons.forEach(function(button) {
 })
 ```
 <script>
-var buttons = Array.prototype.slice.call(document.querySelectorAll('.ex3 button'));
+var buttons = [].slice.call(document.querySelectorAll('.ex3 button'));
 buttons.forEach(function(button) {
   button.addEventListener('click', function() {
     alert(button.innerText)
