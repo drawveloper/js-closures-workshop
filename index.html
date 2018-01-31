@@ -139,6 +139,7 @@ pre {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 3px;
+  z-index: 1;
 }
 
 .progress-bar {
@@ -979,15 +980,16 @@ pre .hljs-xml .hljs-cdata {
     <section class="slide-content"><p>How to hide <code>age</code> but still<br>make <code>looksLike</code> work?</p>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createPerson</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> {
-    age: <span class="hljs-number">25</span>,
-    looksLike: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-attr">age</span>: <span class="hljs-number">25</span>,
+    <span class="hljs-attr">looksLike</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
       <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.age - <span class="hljs-number">5</span>;
     }
   };
 }
 <span class="hljs-keyword">var</span> dude = createPerson();
 dude.looksLike() <span class="hljs-comment">// 20</span>
-dude.age <span class="hljs-comment">// 25 - oops!</span></code></pre>
+dude.age <span class="hljs-comment">// 25 - oops!</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-5">
@@ -998,7 +1000,8 @@ dude.age <span class="hljs-comment">// 25 - oops!</span></code></pre>
   button.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     alert(button.innerText)
   })
-}</code></pre>
+}
+</code></pre>
 <script>
 var buttons = document.querySelectorAll('.ex0 button');
 for (var i = 0; i < buttons.length; i++) {
@@ -1052,21 +1055,24 @@ for (var i = 0; i < buttons.length; i++) {
     <section class="slide-content"><h3 id="primitive-values">Primitive Values</h3>
 <p>When you initialize a variable with a primitive,<br>this variable holds <strong>the actual value</strong>.  </p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> myString = <span class="hljs-string">'test'</span>;
-<span class="hljs-keyword">var</span> myNumber = <span class="hljs-number">123</span>;</code></pre>
+<span class="hljs-keyword">var</span> myNumber = <span class="hljs-number">123</span>;
+</code></pre>
 <p>These variables hold <strong>primitive values</strong>.</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-12">
     <section class="slide-content"><h3 id="reference-values">Reference Values</h3>
 <p>When you initialize a variable with an object,<br>this variable holds <strong>the reference to the object</strong>.</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> myObject1 = { foo: <span class="hljs-string">'bar'</span> };
-<span class="hljs-keyword">var</span> myObject2 = { qux: <span class="hljs-number">123</span> };</code></pre>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> myObject1 = { <span class="hljs-attr">foo</span>: <span class="hljs-string">'bar'</span> };
+<span class="hljs-keyword">var</span> myObject2 = { <span class="hljs-attr">qux</span>: <span class="hljs-number">123</span> };
+</code></pre>
 <p>These variables hold <strong>reference values</strong>.</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-13">
     <section class="slide-content"><p>This is <strong>super incredibly important!</strong><br>A variable <em>never holds the object itself</em>.<br>The object is far away, in a magical land <em>(heap)</em>.<br>You only get a <strong>reference</strong> to the object.</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> myRefToObject = { foo: <span class="hljs-string">'bar'</span> };</code></pre>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> myRefToObject = { <span class="hljs-attr">foo</span>: <span class="hljs-string">'bar'</span> };
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-14">
@@ -1091,28 +1097,31 @@ for (var i = 0; i < buttons.length; i++) {
 <span class="hljs-keyword">var</span> b = a;
 <span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 1</span>
 a = <span class="hljs-number">2</span>;
-<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 1</span></code></pre>
+<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 1</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-17">
     <section class="slide-content"><h3 id="copying-reference-values">Copying reference values</h3>
 <p>Assigning variables copies reference values.<br>(The same as primitive values!)</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> a = { foo: <span class="hljs-string">'bar'</span> };
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> a = { <span class="hljs-attr">foo</span>: <span class="hljs-string">'bar'</span> };
 <span class="hljs-comment">// Creates a copy of the reference.</span>
 <span class="hljs-keyword">var</span> b = a;
 <span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// { foo: 'bar' }</span>
 a = <span class="hljs-number">2</span>;
-<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// { foo: 'bar' }</span></code></pre>
+<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// { foo: 'bar' }</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-18">
     <section class="slide-content"><h3 id="copying-reference-values">Copying reference values</h3>
 <p>However, references still point<br>to the same object and can modify it.</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> a = { foo: <span class="hljs-string">'bar'</span> };
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> a = { <span class="hljs-attr">foo</span>: <span class="hljs-string">'bar'</span> };
 <span class="hljs-comment">// Create a copy of the reference.</span>
 <span class="hljs-keyword">var</span> b = a;
 b.foo = <span class="hljs-number">2</span>;
-<span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// { foo: 2 }</span></code></pre>
+<span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// { foo: 2 }</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-19">
@@ -1126,7 +1135,8 @@ b.foo = <span class="hljs-number">2</span>;
 <span class="hljs-keyword">var</span> a = <span class="hljs-number">1</span>;
 <span class="hljs-keyword">var</span> b = foo(a);
 <span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// 1</span>
-<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 2</span></code></pre>
+<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 2</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-20">
@@ -1137,10 +1147,11 @@ b.foo = <span class="hljs-number">2</span>;
   myParameter = <span class="hljs-string">'bar'</span>; <span class="hljs-comment">// Overwrite your copy</span>
   <span class="hljs-keyword">return</span> myParameter; <span class="hljs-comment">// Nothing happens outside</span>
 }
-<span class="hljs-keyword">var</span> a = { foo: <span class="hljs-number">123</span> };
+<span class="hljs-keyword">var</span> a = { <span class="hljs-attr">foo</span>: <span class="hljs-number">123</span> };
 <span class="hljs-keyword">var</span> b = foo(a);
 <span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// { foo: 123 }</span>
-<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 'bar'</span></code></pre>
+<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 'bar'</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-21">
@@ -1169,7 +1180,8 @@ b.foo = <span class="hljs-number">2</span>;
 <span class="hljs-keyword">var</span> myFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-comment">// myFunction scope</span>
   <span class="hljs-keyword">var</span> bar = <span class="hljs-number">2</span>; <span class="hljs-comment">// Local variable</span>
-};</code></pre>
+};
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-24">
@@ -1183,7 +1195,8 @@ b.foo = <span class="hljs-number">2</span>;
   <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     <span class="hljs-comment">// innerFunction scope</span>
   };
-};</code></pre>
+};
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-25">
@@ -1195,7 +1208,8 @@ b.foo = <span class="hljs-number">2</span>;
   <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     <span class="hljs-comment">// innerFunction scope - can access Global AND outer scopes</span>
   };
-};</code></pre>
+};
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-26">
@@ -1234,7 +1248,8 @@ b.foo = <span class="hljs-number">2</span>;
 <span class="hljs-keyword">var</span> myInnerFunc = outerFunction();
 <span class="hljs-built_in">console</span>.log(foo); <span class="hljs-comment">// ReferenceError!</span>
 <span class="hljs-keyword">var</span> value = myInnerFunc();
-<span class="hljs-built_in">console</span>.log(value); <span class="hljs-comment">// 3</span></code></pre>
+<span class="hljs-built_in">console</span>.log(value); <span class="hljs-comment">// 3</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-31">
@@ -1247,7 +1262,8 @@ b.foo = <span class="hljs-number">2</span>;
   <span class="hljs-keyword">var</span> innerFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     <span class="hljs-comment">// innerFunction scope - can access Global AND outer scopes</span>
   };
-};</code></pre>
+};
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-32">
@@ -1279,15 +1295,16 @@ b.foo = <span class="hljs-number">2</span>;
     <section class="slide-content"><p>Imagine you want to create a person<br>object with a <code>looksLike</code> function,<br>but hide their age:</p>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createPerson</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> {
-    age: <span class="hljs-number">25</span>,
-    looksLike: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-attr">age</span>: <span class="hljs-number">25</span>,
+    <span class="hljs-attr">looksLike</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
       <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.age - <span class="hljs-number">5</span>;
     }
   };
 }
 <span class="hljs-keyword">var</span> dude = createPerson();
 dude.looksLike() <span class="hljs-comment">// 20</span>
-dude.age <span class="hljs-comment">// 25 - oops!</span></code></pre>
+dude.age <span class="hljs-comment">// 25 - oops!</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-37">
@@ -1295,14 +1312,15 @@ dude.age <span class="hljs-comment">// 25 - oops!</span></code></pre>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createPerson</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">var</span> age = <span class="hljs-number">25</span>;
   <span class="hljs-keyword">return</span> {
-    looksLike: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-attr">looksLike</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
       <span class="hljs-keyword">return</span> age - <span class="hljs-number">5</span>;
     }
   };
 }
 <span class="hljs-keyword">var</span> dude = createPerson();
 dude.looksLike() <span class="hljs-comment">// 20</span>
-dude.age <span class="hljs-comment">// undefined</span></code></pre>
+dude.age <span class="hljs-comment">// undefined</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-38">
@@ -1325,7 +1343,8 @@ dude.age <span class="hljs-comment">// undefined</span></code></pre>
 <span class="hljs-keyword">var</span> myFunction = createMyFunction(foo);
 foo = <span class="hljs-number">2</span>;
 <span class="hljs-built_in">console</span>.log(foo); <span class="hljs-comment">// 2 - changed outside.</span>
-myFunction(); <span class="hljs-comment">// 1 - no matter. foo was COPIED!</span></code></pre>
+myFunction(); <span class="hljs-comment">// 1 - no matter. foo was COPIED!</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-41">
@@ -1343,7 +1362,8 @@ You want to create a click handler for each of them that alerts their content. <
     alert(button.innerText);
   };
   button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
-}</code></pre>
+}
+</code></pre>
 <script>
 var buttons = document.querySelectorAll('.ex1 button');
 for (var i = 0; i < buttons.length; i++) {
@@ -1377,7 +1397,8 @@ foo = <span class="hljs-number">2</span>;
   <span class="hljs-built_in">console</span>.log(foo);
 }
 printFoo();
-alsoPrintFoo();</code></pre>
+alsoPrintFoo();
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-46">
@@ -1391,7 +1412,8 @@ foo = <span class="hljs-number">2</span>;
   <span class="hljs-built_in">console</span>.log(foo);
 }
 printFoo(); <span class="hljs-comment">// 2</span>
-alsoPrintFoo(); <span class="hljs-comment">// 2</span></code></pre>
+alsoPrintFoo(); <span class="hljs-comment">// 2</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-47">
@@ -1400,14 +1422,15 @@ alsoPrintFoo(); <span class="hljs-comment">// 2</span></code></pre>
   </div>
   <div class="slide hidden" id="slide-48">
     <section class="slide-content"><pre><code class="lang-js"><span class="hljs-keyword">var</span> foo = <span class="hljs-number">1</span>;
-<span class="hljs-keyword">var</span> makePrintFoo = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">myArgument</span>) </span>{
+<span class="hljs-keyword">var</span> makePrintFoo = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">myCopiedArgument</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printFoo</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-built_in">console</span>.log(myCopiedArgument);
   }
 }
 <span class="hljs-keyword">var</span> printFoo = makePrintFoo(foo);
 foo = <span class="hljs-number">2</span>;
-printFoo(); <span class="hljs-comment">// 1</span></code></pre>
+printFoo(); <span class="hljs-comment">// 1</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-49">
@@ -1433,7 +1456,8 @@ button = buttons[<span class="hljs-number">2</span>];
 <span class="hljs-keyword">var</span> clickHandler = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   alert(button.innerText);
 };
-button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);</code></pre>
+button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-51">
@@ -1446,7 +1470,8 @@ button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
     <span class="hljs-comment">// Shares reference for unique "button" var.</span>
     alert(button.innerText)
   })
-}</code></pre>
+}
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-52">
@@ -1460,7 +1485,8 @@ button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     alert(el.innerText);
   }
-};</code></pre>
+};
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-54">
@@ -1476,7 +1502,8 @@ button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
   };
   <span class="hljs-keyword">var</span> clickHandler = createClickHandler(button);
   button.addEventListener(<span class="hljs-string">'click'</span>, clickHandler);
-}</code></pre>
+}
+</code></pre>
 <script>
 var buttons = document.querySelectorAll('.ex2 button');
 for (var i = 0; i < buttons.length; i++) {
@@ -1500,7 +1527,8 @@ for (var i = 0; i < buttons.length; i++) {
       alert(el.innerText)
     }
   })(button))
-}</code></pre>
+}
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-56">
@@ -1516,7 +1544,8 @@ buttons.forEach(<span class="hljs-function"><span class="hljs-keyword">function<
   button.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     alert(button.innerText)
   })
-})</code></pre>
+})
+</code></pre>
 <script>
 var buttons = [].slice.call(document.querySelectorAll('.ex3 button'));
 buttons.forEach(function(button) {
@@ -1536,10 +1565,11 @@ buttons.forEach(function(button) {
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> sayAge = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.age);
 };
-<span class="hljs-keyword">var</span> a = { age: <span class="hljs-number">1</span>, sayAge: sayAge };
-<span class="hljs-keyword">var</span> b = { age: <span class="hljs-number">2</span>, sayAge: sayAge };
+<span class="hljs-keyword">var</span> a = { <span class="hljs-attr">age</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">sayAge</span>: sayAge };
+<span class="hljs-keyword">var</span> b = { <span class="hljs-attr">age</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">sayAge</span>: sayAge };
 a.sayAge() <span class="hljs-comment">// 1</span>
-b.sayAge() <span class="hljs-comment">// 2</span></code></pre>
+b.sayAge() <span class="hljs-comment">// 2</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-60">
@@ -1548,55 +1578,59 @@ b.sayAge() <span class="hljs-comment">// 2</span></code></pre>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> wat = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>);
 };
-wat(); <span class="hljs-comment">// Window</span></code></pre>
+wat(); <span class="hljs-comment">// Window</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-61">
     <section class="slide-content"><h3 id="common-this-confusion-">Common <code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
-  age: <span class="hljs-number">1</span>,
-  sayAge: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-attr">age</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">sayAge</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.age);
   }
 };
-<span class="hljs-keyword">var</span> b = { age: <span class="hljs-number">2</span> };
+<span class="hljs-keyword">var</span> b = { <span class="hljs-attr">age</span>: <span class="hljs-number">2</span> };
 a.sayAge(); <span class="hljs-comment">// 1</span>
 <span class="hljs-comment">//var withoutContext = a.sayAge;</span>
 <span class="hljs-comment">//withoutContext(); // undefined</span>
 <span class="hljs-comment">//b.sayAge = withoutContext;</span>
-<span class="hljs-comment">//b.sayAge(); // 2</span></code></pre>
+<span class="hljs-comment">//b.sayAge(); // 2</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-62">
     <section class="slide-content"><h3 id="common-this-confusion-">Common <code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
-  age: <span class="hljs-number">1</span>,
-  sayAge: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-attr">age</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">sayAge</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.age);
   }
 };
-<span class="hljs-keyword">var</span> b = { age: <span class="hljs-number">2</span> };
+<span class="hljs-keyword">var</span> b = { <span class="hljs-attr">age</span>: <span class="hljs-number">2</span> };
 a.sayAge(); <span class="hljs-comment">// 1</span>
 <span class="hljs-keyword">var</span> withoutContext = a.sayAge;
 withoutContext(); <span class="hljs-comment">// undefined</span>
 <span class="hljs-comment">//b.sayAge = withoutContext;</span>
-<span class="hljs-comment">//b.sayAge(); // 2</span></code></pre>
+<span class="hljs-comment">//b.sayAge(); // 2</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-63">
     <section class="slide-content"><h3 id="common-this-confusion-">Common <code>this</code> confusion.</h3>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> a = {
-  age: <span class="hljs-number">1</span>,
-  sayAge: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-attr">age</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">sayAge</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.age);
   }
 };
-<span class="hljs-keyword">var</span> b = { age: <span class="hljs-number">2</span> };
+<span class="hljs-keyword">var</span> b = { <span class="hljs-attr">age</span>: <span class="hljs-number">2</span> };
 a.sayAge(); <span class="hljs-comment">// 1</span>
 <span class="hljs-keyword">var</span> withoutContext = a.sayAge;
 withoutContext(); <span class="hljs-comment">// undefined</span>
 b.sayAge = withoutContext;
-b.sayAge(); <span class="hljs-comment">// 2</span></code></pre>
+b.sayAge(); <span class="hljs-comment">// 2</span>
+</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-64">

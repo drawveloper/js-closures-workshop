@@ -74,8 +74,8 @@ for (var i = 0; i < buttons.length; i++) {
 
 --
 
-##Let's revisit some  
-##**JavaScript Insides.**
+## Let's revisit some  
+## **JavaScript Insides.**
 
 --
 
@@ -541,7 +541,7 @@ alsoPrintFoo(); // 2
 
 ```js
 var foo = 1;
-var makePrintFoo = function(myArgument) {
+var makePrintFoo = function(myCopiedArgument) {
   return function printFoo() {
     console.log(myCopiedArgument);
   }
